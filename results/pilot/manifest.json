@@ -1,0 +1,79 @@
+{
+  "specification": {
+    "noise_rates": [
+      0,
+      0.15
+    ],
+    "experiment": {
+      "kappa": 0.99,
+      "stop_size": 400,
+      "confidence": 0.95,
+      "tolerance": 0.01,
+      "batch": 20,
+      "window": 3,
+      "budget": 400,
+      "initial": 40,
+      "pcf": 0.01
+    },
+    "datasets": [
+      {
+        "samples": 2400,
+        "kind": "synthetic",
+        "positive_fraction": 0.5,
+        "name": "synthetic-balanced"
+      },
+      {
+        "samples": 2400,
+        "kind": "synthetic",
+        "positive_fraction": 0.1,
+        "name": "synthetic-imbalanced"
+      },
+      {
+        "categories": [
+          "sci.space",
+          "sci.med"
+        ],
+        "kind": "20newsgroups",
+        "name": "space-vs-medicine"
+      },
+      {
+        "categories": [
+          "rec.sport.baseball",
+          "rec.sport.hockey"
+        ],
+        "kind": "20newsgroups",
+        "name": "baseball-vs-hockey"
+      }
+    ],
+    "queries": [
+      "uncertainty",
+      "random"
+    ],
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "variants": [
+      {
+        "name": "logistic",
+        "learner": "logistic"
+      },
+      {
+        "name": "linear-svm",
+        "learner": "linear-svm"
+      }
+    ]
+  },
+  "source_sha256": "895de86a25908d091699216e871de15e26fb06d84b7b71f5d7e389c054a54fc0",
+  "versions": {
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.7.2",
+    "matplotlib": "3.10.7"
+  },
+  "python": "3.12.14",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "expected_runs": 96,
+  "manifest_id": "3b412e103cbafac213ef40b6e1740ac1ab6c68f6d0cf6207a70fe37380d44413"
+}
