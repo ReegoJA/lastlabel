@@ -1,4 +1,7 @@
-"""Label-free binary stopping rules with explicit degenerate-case handling."""
+"""SP (Bloodgood and Vijay-Shanker) and PCF (Altschuler and Bloodgood).
+
+Definitions and research attribution are in docs/REFERENCES.md.
+"""
 
 import dataclasses
 

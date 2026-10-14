@@ -10,28 +10,6 @@
     "initial": 40,
     "pcf": 0.01
   },
-  "seeds": [
-    0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    11,
-    12,
-    13,
-    14,
-    15,
-    16,
-    17,
-    18,
-    19
-  ],
   "datasets": [
     {
       "samples": 2400,
@@ -60,7 +38,59 @@
       ],
       "kind": "20newsgroups",
       "name": "baseball-vs-hockey"
+    },
+    {
+      "name": "graphics-vs-windows",
+      "kind": "20newsgroups",
+      "categories": [
+        "comp.graphics",
+        "comp.windows.x"
+      ]
+    },
+    {
+      "name": "politics-vs-religion",
+      "kind": "20newsgroups",
+      "categories": [
+        "talk.politics.misc",
+        "talk.religion.misc"
+      ]
     }
+  ],
+  "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119,
+    120,
+    121,
+    122,
+    123,
+    124,
+    125,
+    126,
+    127,
+    128,
+    129
+  ],
+  "queries": [
+    "uncertainty",
+    "random"
   ],
   "noise_rates": [
     0,
@@ -68,42 +98,42 @@
     0.15,
     0.3
   ],
-  "queries": [
-    "uncertainty",
-    "random"
-  ],
   "variants": [
     {
-      "name": "baseline",
-      "learner": "logistic"
+      "name": "logistic-symmetric",
+      "learner": "logistic",
+      "noise_model": "symmetric",
+      "reference": "logistic-symmetric"
     },
     {
-      "name": "linear-svm",
-      "learner": "linear-svm"
+      "name": "logistic-positive-only",
+      "learner": "logistic",
+      "noise_model": "positive-only",
+      "reference": "logistic-symmetric"
     },
     {
-      "name": "positive-noise",
-      "noise_model": "positive-only"
+      "name": "logistic-negative-only",
+      "learner": "logistic",
+      "noise_model": "negative-only",
+      "reference": "logistic-symmetric"
     },
     {
-      "name": "negative-noise",
-      "noise_model": "negative-only"
+      "name": "linear-svm-symmetric",
+      "learner": "linear-svm",
+      "noise_model": "symmetric",
+      "reference": "linear-svm-symmetric"
     },
     {
-      "name": "batch-5",
-      "batch": 5
+      "name": "linear-svm-positive-only",
+      "learner": "linear-svm",
+      "noise_model": "positive-only",
+      "reference": "linear-svm-symmetric"
     },
     {
-      "name": "batch-50",
-      "batch": 50
-    },
-    {
-      "name": "stop-100",
-      "stop_size": 100
-    },
-    {
-      "name": "stop-800",
-      "stop_size": 800
+      "name": "linear-svm-negative-only",
+      "learner": "linear-svm",
+      "noise_model": "negative-only",
+      "reference": "linear-svm-symmetric"
     }
   ]
 }

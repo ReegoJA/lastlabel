@@ -1,5 +1,7 @@
 # Methods and interpretation
 
+This implementation builds on Dr. Michael Bloodgood's stopping research and Reego John-Annaselvan's undergraduate work with him. SP is credited to Bloodgood and Vijay-Shanker, its theoretical analysis to Bloodgood and Grothendieck, PCF to Altschuler and Bloodgood, and the stop-set comparison to Kurlandski and Bloodgood. See [REFERENCES.md](REFERENCES.md) for the papers and [STUDY.md](STUDY.md) for the new experimental choices.
+
 ## Experimental unit
 
 A trajectory is a dataset, seed, acquisition policy, noise rate, and named

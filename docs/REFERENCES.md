@@ -1,5 +1,7 @@
 # Sources and attribution
 
+LastLabel grows directly from Reego John-Annaselvan's undergraduate research with Dr. Michael Bloodgood at The College of New Jersey. Bloodgood and the coauthors below developed the research foundation. LastLabel implements and extends their ideas to test annotation-cost and predictive-performance trade-offs.
+
 ## Research foundations
 
 1. Michael Bloodgood and K. Vijay-Shanker (2009). *A Method for Stopping Active
@@ -53,3 +55,7 @@ and each result manifest. Project code is MIT-licensed.
 Coding-style references:
 [awesome-guidelines](https://github.com/Kristories/awesome-guidelines) and its
 linked [Google Python guide](https://google.github.io/styleguide/pyguide.html).
+
+## Computing infrastructure
+
+The expanded workflow targets Georgia Tech PACE Phoenix, operated by the Partnership for an Advanced Computing Environment (RRID:SCR_027619). Cluster execution is pending. The completed pilot was run locally. See [PACE acknowledgment guidance](https://pace.gatech.edu/citing-pace/) and [CLUSTER.md](CLUSTER.md).

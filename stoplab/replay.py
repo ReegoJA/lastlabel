@@ -34,7 +34,9 @@ def load_runs(results: pathlib.Path) -> tuple:
         parameters = {
             **spec["experiment"],
             **{
-                key: value for key, value in variant.items() if key != "name"
+                key: value for key, value in variant.items() if key not in {
+                    "name", "reference"
+                }
             }
         }
         config = experiment.Config(**parameters,

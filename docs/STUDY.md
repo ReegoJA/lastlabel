@@ -1,69 +1,59 @@
 # Research study specification
 
-## Questions
+## Purpose and origin
 
-1. Does evaluating stability on the shrinking unlabeled pool change stopping
-   cost and held-out performance relative to a fixed random stop set?
-2. Can label corruption produce stable predictions before useful performance,
-   and do positive-only errors behave differently on imbalanced tasks?
-3. Do effects persist across logistic regression and a linear SVM?
-4. How sensitive are those conclusions to batch size, stop-set size, and the
-   smoothing window? Which apparent improvements disappear under pairing?
+This project continues Reego John-Annaselvan's undergraduate research with Dr. Michael Bloodgood at The College of New Jersey. Bloodgood and his coauthors' published stopping methods are the foundation. The study asks when those methods preserve performance while reducing annotation effort, and where additional safeguards may be needed.
 
-These are hypotheses to test, not promised findings. A useful negative result
-is that a suspected failure does not occur under a declared protocol.
+## Published foundation and implementation differences
 
-## Staged execution
+| Choice | Basis |
+| --- | --- |
+| SP with mean kappa above 0.99 across three model pairs | Bloodgood and Vijay-Shanker (2009), also described in Kurlandski and Bloodgood (2022), section III-A |
+| PCF estimate and consecutive threshold checks | Altschuler and Bloodgood (2019), equation 3 |
+| Fixed versus current remaining stop sets | Kurlandski and Bloodgood (2022), sections III-A and V-A |
+| Linear SVM, C=1, closest-to-hyperplane acquisition, random comparison | Kurlandski and Bloodgood (2022), section IV |
+| 20 Newsgroups bydate train/test split | Kurlandski and Bloodgood (2022), section IV |
 
-| Stage | Configuration | Training trajectories | Purpose |
-|---|---|---:|---|
-| Smoke | `smoke.json` | 1 | Installation and artifact sanity |
-| Pilot | `pilot.json` | 96 | Four tasks, three seeds, two policies, two noise rates, two learners |
-| Cluster | `cluster.json` | 5,120 | Four tasks × 20 seeds × two policies × four noise rates × eight variants |
-| Sensitivity | `sensitivity.json` | Reuses existing trajectories | 12 thresholds × three windows × three stop sets |
+This implementation differs from the published setup. It uses binary category pairs rather than all 20 categories, pool-fitted TF-IDF with header/footer/quote removal rather than the paper's bag-of-words preprocessing, absolute batch and stop-set sizes rather than 0.5% and 50%, and finite 400/800-label budgets rather than a full-training endpoint. PCF uses epsilon .01 and three pairs here, while the 2019 paper also studies other settings. These choices are documented extensions, not an exact reproduction.
 
-The cluster configuration fixes 40 initial labels, budget 400, and baseline
-batch size 20 / stop size 400. Variants change exactly one of learner,
-annotation mechanism, batch size (5 or 50), or stop size (100 or 800).
-Noise rates are 0, .05, .15, .30. Methods are evaluated on each trajectory,
-not retrained separately. The cluster replay would produce 552,960 decisions
-from 5,120 training trajectories. Conditions are intentionally paired,
-independent seeds, rather than every trajectory or decision, are resampling units.
+The original experiment code and preprocessing assets from the TCNJ work are unavailable. Undisclosed paper details are not inferred as facts.
 
-## Primary comparisons
+## Extension rationale
 
-Report remaining-minus-fixed and easy-minus-fixed SP effects separately for
-each dataset, query policy, and noise condition. Report macro F1 difference,
-label difference, stopping fraction, and uncertainty together. Retain budget
-fallbacks in the main table, report stopping coverage so large savings cannot
-hide frequent failures to trigger. Compare PCF as a separate criterion and
-report positive F1 alongside macro F1.
+- **Noise mechanisms:** symmetric, positive-only, and negative-only flips test whether stable predictions can hide systematic annotation errors. Rates 0, .05, .15, and .30 are declared stress levels, not estimated human error rates or paper settings. Compare realized corruption as well as nominal rates.
+- **Learners:** retain linear SVM and the pilot's logistic baseline. Cross both with each noise mechanism so an apparent noise effect is not confounded with learner choice.
+- **Tasks:** retain the two pilot synthetic tasks and two pilot text pairs. Add graphics versus Windows for another closely related technical pair and politics versus religion for a different topic domain. These are new task choices from the same corpus, not independent datasets or the papers' full benchmark suite.
+- **Replication:** use 30 seeds in the main study, ten times the pilot's three. Under independent-replicate assumptions, standard error scales roughly with the inverse square root of the seed count. This is a precision-oriented design choice, not a power calculation or guarantee of significance. Follow-up stages use 20 seeds to bound cost. Record achieved interval widths.
+- **Batch and stop-set sizes:** change one factor at a time around the pilot's batch 20 and stop set 400. Batch 5/50 and stop set 100/800 test smaller/larger alternatives. They are declared extensions, not values attributed to Bloodgood's papers.
+- **Budget:** compare 400 and 800 labels with identical acquisition prefixes. The pilot's high fallback rate motivates asking whether the 400-label ceiling hides later stops. Doubling the budget is a bounded diagnostic, not a claim that 800 is optimal.
+- **Easy set and probability confidence:** retain these as exploratory diagnostics. They are not the published SP stop-set recommendation or implementations of DC/NC.
 
-Use the first declared variant as the control in `variants.csv`. The cluster
-control is `baseline`, the pilot control is `logistic`. Variant effects pair
-matching dataset, seed, query policy, noise rate, and stopping rule. Class-only
-noise has different overall corruption, avoid interpreting its conditional
-rate as equivalent exposure to symmetric noise.
+## Stages
 
-## Confirmatory versus exploratory analysis
+| Stage | Configuration | Trajectories | Matrix |
+| --- | --- | ---: | --- |
+| Smoke | `smoke.json` | 1 | Installation check |
+| Completed pilot | `pilot.json` | 96 | Original four-task experiment |
+| Robustness | `cluster.json` | 8,640 | 6 tasks x 30 seeds x 2 query policies x 4 noise rates x 6 learner/noise variants |
+| Ablations | `cluster-ablations.json` | 4,800 | 6 tasks x 20 seeds x 2 policies x 2 noise rates x 10 learner/setting variants |
+| Budget extension | `cluster-budget.json` | 1,920 | 6 tasks x 20 seeds x 2 policies x 2 noise rates x 4 learner/budget variants |
 
-The local pilot supports implementation checks and exploratory questions.
-It does not establish a new method's superiority. Freeze a separate study
-configuration and use new seeds before making confirmatory claims prompted by
-pilot findings. For truly held-out confirmation, reserve additional datasets
-or a separately specified evaluation split, new seeds on the same text test
-documents do not create a new held-out corpus.
+Main seeds are 100-129, ablation seeds 200-219, and budget seeds 300-319. Distinct ranges avoid reusing pilot seeds 0-2. Seed IDs themselves have no scientific significance.
 
-Sensitivity replay is a diagnostic, not a threshold tuner. If a new adaptive
-stopping method is developed, select its settings on separate development
-data and evaluate it on untouched tasks. Preserve the old manifest and report
-all predeclared comparisons, including failures and censored outcomes.
+The earlier 5,120-run plan is preserved in `cluster-legacy.json` for reference and is not an extra required stage. Full threshold replay would produce 1,658,880 correlated decisions from the expanded study's 15,360 trajectories.
 
-## Extension milestones
+## Comparisons and interpretation
 
-The implemented release provides the baseline infrastructure. Substantial
-follow-on research can add independently validated multiclass generalizations,
-human annotation costs, instance-dependent noise, and a development-only
-calibration procedure for a new noise-aware criterion. Each extension should
-include a mathematical definition, tests, a predeclared comparison, and a
-failure analysis before claiming a contribution. None is claimed as implemented.
+Primary stop-set contrasts remain remaining-minus-fixed and easy-minus-fixed within dataset, learner, acquisition policy, noise condition, and seed. Report positive F1, macro F1, labels, stopping coverage, and uncertainty together. Keep budget fallbacks in all averages.
+
+Each expanded variant declares its `reference`. Noise comparisons use the same learner's symmetric-noise control. Ablations use the same learner's baseline. Budget comparisons use that learner's 400-label control. No variant crosses learners accidentally.
+
+Compare the 400- and 800-label runs using paired absolute annotation counts and F1 as well as fractional savings. Savings fractions have different denominators. A larger budget also changes the hindsight peak reference, so premature/excess-label measures are not directly comparable across budgets without a common reference.
+
+Report task-specific results. New seeds on the same text test documents do not create fresh held-out data. Do not pool correlated settings as independent replicates or select thresholds using test results and then claim confirmation on those same results. Label any post-hoc examples or follow-up choices as exploratory.
+
+## Computing and reporting
+
+PACE Phoenix supplies parallel CPU capacity for independent trajectories. It can reduce elapsed experiment time and permit more replications. It does not improve a fixed model by itself or guarantee a favorable result. Measure representative tasks before allocating the full study, then record actual CPU time, peak memory, completed tasks, failures, environment, and source revision.
+
+Cluster results remain pending. See [CLUSTER.md](CLUSTER.md) for the upload and run procedure and [REFERENCES.md](REFERENCES.md) for Bloodgood's papers and PACE attribution.

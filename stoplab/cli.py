@@ -50,13 +50,20 @@ def plan(path: pathlib.Path) -> tuple:
     variants = spec.get("variants", [{"name": "baseline"}])
     if len({item["name"] for item in variants}) != len(variants):
         raise ValueError("Variant names must be unique.")
+    variant_names = {item["name"] for item in variants}
+    if any(
+            item.get("reference", item["name"]) not in variant_names
+            for item in variants):
+        raise ValueError("Variant reference must name a declared variant.")
     for dataset, seed, query, noise, variant in itertools.product(
             spec["datasets"], spec["seeds"], spec["queries"],
             spec["noise_rates"], variants):
         parameters = {
             **spec["experiment"],
             **{
-                key: value for key, value in variant.items() if key != "name"
+                key: value for key, value in variant.items() if key not in {
+                    "name", "reference"
+                }
             }
         }
         config = experiment.Config(**parameters,
@@ -99,7 +106,13 @@ def execute(args):
                 "Output belongs to different code/config/environment. Use a new directory."
             )
     atomic_json(manifest_path, manifest)
-    indices = range(len(tasks)) if args.task is None else [args.task]
+    task_count = getattr(args, "task_count", 1)
+    if task_count < 1 or (args.task is None and task_count != 1):
+        raise ValueError("A positive task count requires a starting task ID.")
+    if args.task is not None and not 0 <= args.task < len(tasks):
+        raise ValueError(f"Task ID must be in [0, {len(tasks) - 1}].")
+    indices = (range(len(tasks)) if args.task is None else range(
+        args.task, min(args.task + task_count, len(tasks))))
     for index in indices:
         if not 0 <= index < len(tasks):
             raise ValueError(f"Task ID must be in [0, {len(tasks) - 1}].")
@@ -141,6 +154,7 @@ def main():
         if name == "run":
             command.add_argument("--output", type=pathlib.Path, required=True)
             command.add_argument("--task", type=int)
+            command.add_argument("--task-count", type=int, default=1)
             command.add_argument("--download", action="store_true")
     for name in ("report", "replay", "audit"):
         command = commands.add_parser(name)

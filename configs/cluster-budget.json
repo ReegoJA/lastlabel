@@ -1,0 +1,115 @@
+{
+  "experiment": {
+    "kappa": 0.99,
+    "stop_size": 400,
+    "confidence": 0.95,
+    "tolerance": 0.01,
+    "batch": 20,
+    "window": 3,
+    "budget": 400,
+    "initial": 40,
+    "pcf": 0.01
+  },
+  "datasets": [
+    {
+      "samples": 2400,
+      "kind": "synthetic",
+      "positive_fraction": 0.5,
+      "name": "synthetic-balanced"
+    },
+    {
+      "samples": 2400,
+      "kind": "synthetic",
+      "positive_fraction": 0.1,
+      "name": "synthetic-imbalanced"
+    },
+    {
+      "categories": [
+        "sci.space",
+        "sci.med"
+      ],
+      "kind": "20newsgroups",
+      "name": "space-vs-medicine"
+    },
+    {
+      "categories": [
+        "rec.sport.baseball",
+        "rec.sport.hockey"
+      ],
+      "kind": "20newsgroups",
+      "name": "baseball-vs-hockey"
+    },
+    {
+      "name": "graphics-vs-windows",
+      "kind": "20newsgroups",
+      "categories": [
+        "comp.graphics",
+        "comp.windows.x"
+      ]
+    },
+    {
+      "name": "politics-vs-religion",
+      "kind": "20newsgroups",
+      "categories": [
+        "talk.politics.misc",
+        "talk.religion.misc"
+      ]
+    }
+  ],
+  "seeds": [
+    300,
+    301,
+    302,
+    303,
+    304,
+    305,
+    306,
+    307,
+    308,
+    309,
+    310,
+    311,
+    312,
+    313,
+    314,
+    315,
+    316,
+    317,
+    318,
+    319
+  ],
+  "queries": [
+    "uncertainty",
+    "random"
+  ],
+  "noise_rates": [
+    0,
+    0.15
+  ],
+  "variants": [
+    {
+      "name": "logistic-budget-400",
+      "learner": "logistic",
+      "reference": "logistic-budget-400",
+      "budget": 400
+    },
+    {
+      "name": "logistic-budget-800",
+      "learner": "logistic",
+      "reference": "logistic-budget-400",
+      "budget": 800
+    },
+    {
+      "name": "linear-svm-budget-400",
+      "learner": "linear-svm",
+      "reference": "linear-svm-budget-400",
+      "budget": 400
+    },
+    {
+      "name": "linear-svm-budget-800",
+      "learner": "linear-svm",
+      "reference": "linear-svm-budget-400",
+      "budget": 800
+    }
+  ]
+}

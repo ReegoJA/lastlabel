@@ -34,32 +34,36 @@ def write_csv(path: pathlib.Path, rows: list):
         writer.writerows(rows)
 
 
-def variant_comparisons(rows: list, reference: str) -> list:
+def variant_comparisons(rows: list, reference: str | dict) -> list:
     """Pair variant differences within dataset, policy, noise, rule, and seed."""
     controls = {
-        (row["dataset"], row["query"], row["noise"], row["rule"], row["seed"]):
-            row for row in rows if row["variant"] == reference
+        (row["dataset"], row["query"], row["noise"], row["rule"], row["seed"], row["variant"]):
+            row for row in rows
     }
     groups = collections.defaultdict(list)
     for row in rows:
         key = (row["dataset"], row["query"], row["noise"], row["rule"],
                row["seed"])
-        if row["variant"] == reference or key not in controls:
+        control_name = reference.get(row["variant"],
+                                     row["variant"]) if isinstance(
+                                         reference, dict) else reference
+        if row["variant"] == control_name or (*key,
+                                              control_name) not in controls:
             continue
-        control = controls[key]
-        groups[(*key[:-1], row["variant"])].append({
+        control = controls[(*key, control_name)]
+        groups[(*key[:-1], row["variant"], control_name)].append({
             "macro_f1": row["macro_f1"] - control["macro_f1"],
             "labels": row["labels"] - control["labels"],
         })
     comparisons = []
-    for (dataset, query, noise, rule,
-         variant), members in sorted(groups.items()):
+    for (dataset, query, noise, rule, variant,
+         control_name), members in sorted(groups.items()):
         row = dict(dataset=dataset,
                    query=query,
                    noise=noise,
                    rule=rule,
                    variant=variant,
-                   reference=reference,
+                   reference=control_name,
                    paired_seeds=len(members))
         for metric in ("macro_f1", "labels"):
             mean, low, high = interval([item[metric] for item in members])
@@ -149,12 +153,16 @@ def generate(results: pathlib.Path, output: pathlib.Path):
     write_csv(output / "runs.csv", rows)
     write_csv(output / "summary.csv", summaries)
     write_csv(output / "paired.csv", pairs)
-    write_csv(
-        output / "variants.csv",
-        variant_comparisons(
-            rows, manifest_data["specification"].get("variants", [{
-                "name": "baseline"
-            }])[0]["name"]))
+    variants = manifest_data["specification"].get("variants", [{
+        "name": "baseline"
+    }])
+    reference = variants[0]["name"]
+    if any("reference" in variant for variant in variants):
+        reference = {
+            variant["name"]: variant.get("reference", variants[0]["name"])
+            for variant in variants
+        }
+    write_csv(output / "variants.csv", variant_comparisons(rows, reference))
     manifest = runs[0]["manifest_id"]
     expected = runs[0]["expected_runs"]
     lines = [

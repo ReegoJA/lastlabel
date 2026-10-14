@@ -1,0 +1,149 @@
+{
+  "experiment": {
+    "kappa": 0.99,
+    "stop_size": 400,
+    "confidence": 0.95,
+    "tolerance": 0.01,
+    "batch": 20,
+    "window": 3,
+    "budget": 400,
+    "initial": 40,
+    "pcf": 0.01
+  },
+  "datasets": [
+    {
+      "samples": 2400,
+      "kind": "synthetic",
+      "positive_fraction": 0.5,
+      "name": "synthetic-balanced"
+    },
+    {
+      "samples": 2400,
+      "kind": "synthetic",
+      "positive_fraction": 0.1,
+      "name": "synthetic-imbalanced"
+    },
+    {
+      "categories": [
+        "sci.space",
+        "sci.med"
+      ],
+      "kind": "20newsgroups",
+      "name": "space-vs-medicine"
+    },
+    {
+      "categories": [
+        "rec.sport.baseball",
+        "rec.sport.hockey"
+      ],
+      "kind": "20newsgroups",
+      "name": "baseball-vs-hockey"
+    },
+    {
+      "name": "graphics-vs-windows",
+      "kind": "20newsgroups",
+      "categories": [
+        "comp.graphics",
+        "comp.windows.x"
+      ]
+    },
+    {
+      "name": "politics-vs-religion",
+      "kind": "20newsgroups",
+      "categories": [
+        "talk.politics.misc",
+        "talk.religion.misc"
+      ]
+    }
+  ],
+  "seeds": [
+    200,
+    201,
+    202,
+    203,
+    204,
+    205,
+    206,
+    207,
+    208,
+    209,
+    210,
+    211,
+    212,
+    213,
+    214,
+    215,
+    216,
+    217,
+    218,
+    219
+  ],
+  "queries": [
+    "uncertainty",
+    "random"
+  ],
+  "noise_rates": [
+    0,
+    0.15
+  ],
+  "variants": [
+    {
+      "name": "logistic-baseline",
+      "learner": "logistic",
+      "reference": "logistic-baseline"
+    },
+    {
+      "name": "logistic-batch-5",
+      "learner": "logistic",
+      "reference": "logistic-baseline",
+      "batch": 5
+    },
+    {
+      "name": "logistic-batch-50",
+      "learner": "logistic",
+      "reference": "logistic-baseline",
+      "batch": 50
+    },
+    {
+      "name": "logistic-stop-100",
+      "learner": "logistic",
+      "reference": "logistic-baseline",
+      "stop_size": 100
+    },
+    {
+      "name": "logistic-stop-800",
+      "learner": "logistic",
+      "reference": "logistic-baseline",
+      "stop_size": 800
+    },
+    {
+      "name": "linear-svm-baseline",
+      "learner": "linear-svm",
+      "reference": "linear-svm-baseline"
+    },
+    {
+      "name": "linear-svm-batch-5",
+      "learner": "linear-svm",
+      "reference": "linear-svm-baseline",
+      "batch": 5
+    },
+    {
+      "name": "linear-svm-batch-50",
+      "learner": "linear-svm",
+      "reference": "linear-svm-baseline",
+      "batch": 50
+    },
+    {
+      "name": "linear-svm-stop-100",
+      "learner": "linear-svm",
+      "reference": "linear-svm-baseline",
+      "stop_size": 100
+    },
+    {
+      "name": "linear-svm-stop-800",
+      "learner": "linear-svm",
+      "reference": "linear-svm-baseline",
+      "stop_size": 800
+    }
+  ]
+}
