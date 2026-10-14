@@ -40,7 +40,7 @@ The original experiment code and preprocessing assets from the TCNJ work are una
 
 Main seeds are 100-129, ablation seeds 200-219, and budget seeds 300-319. Distinct ranges avoid reusing pilot seeds 0-2. Seed IDs themselves have no scientific significance.
 
-The earlier 5,120-run plan is preserved in `cluster-legacy.json` for reference and is not an extra required stage. Full threshold replay would produce 1,658,880 correlated decisions from the expanded study's 15,360 trajectories.
+Full threshold replay would produce 1,658,880 correlated decisions from the expanded study's 15,360 trajectories.
 
 ## Comparisons and interpretation
 
