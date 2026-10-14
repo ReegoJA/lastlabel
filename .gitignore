@@ -12,3 +12,4 @@ results/*
 !results/pilot/
 reports/*
 !reports/pilot/
+!reports/phoenix-main/

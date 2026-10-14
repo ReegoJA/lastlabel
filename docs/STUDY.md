@@ -52,8 +52,20 @@ Compare the 400- and 800-label runs using paired absolute annotation counts and 
 
 Report task-specific results. New seeds on the same text test documents do not create fresh held-out data. Do not pool correlated settings as independent replicates or select thresholds using test results and then claim confirmation on those same results. Label any post-hoc examples or follow-up choices as exploratory.
 
+## Validation and case-study reporting
+
+The expanded configuration was submitted on October 14, 2026. Do not alter its thresholds or comparisons after inspecting outcomes. Audit all stage manifests, task identities, query histories, label counts, and default-rule replays before drawing conclusions.
+
+Use the main study to report remaining-minus-fixed and easy-minus-fixed differences in labels and F1 for each task, learner, policy, and noise condition. Resample matched seeds, not individual stopping decisions. The existing paired tables provide macro-F1 and label-count intervals. Add paired positive-F1 intervals during the interpretation pass before treating the case study as complete. Present both axes together rather than ranking policies by stop frequency.
+
+For an interpretable first view, use all 30 seeds from every main-study task under the symmetric-noise linear-SVM variant, with both acquisition policies and the 0 and 15% noise levels. This is a descriptive subset chosen after submission for continuity with the pilot, not a new confirmatory experiment. Disclose it and retain the complete matrix alongside it. Do not select conditions based on their apparent effect size.
+
+Inspect premature stops, budget fallbacks, minority-class degradation, and sensitivity to annotation noise. Explain task-specific exceptions and show representative trajectories with an explicit selection rule. Report uncertainty conditional on these task datasets. Bootstrap intervals are pointwise and do not adjust for the many comparisons, so avoid claims based on isolated intervals excluding zero.
+
+Interpret the cost/performance trade-off before commissioning more runs. Any revised stopping rule or threshold needs separate development and confirmation data. More trajectories alone do not establish a useful stopping policy.
+
 ## Computing and reporting
 
 PACE Phoenix supplies parallel CPU capacity for independent trajectories. It can reduce elapsed experiment time and permit more replications. It does not improve a fixed model by itself or guarantee a favorable result. Measure representative tasks before allocating the full study, then record actual CPU time, peak memory, completed tasks, failures, environment, and source revision.
 
-Cluster results remain pending. See [CLUSTER.md](CLUSTER.md) for the upload and run procedure and [REFERENCES.md](REFERENCES.md) for Bloodgood's papers and PACE attribution.
+All 15,360 training trajectories completed on October 14, 2026. The main-stage audit and reports are complete. Follow-up analysis remains in progress, and full scientific interpretation is not yet complete. See [CLUSTER.md](CLUSTER.md) for the upload and run procedure and [REFERENCES.md](REFERENCES.md) for Bloodgood's papers and PACE attribution.

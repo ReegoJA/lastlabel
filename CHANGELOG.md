@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Research case-study summary centered on annotation cost and predictive performance
+- Consistent expanded-study counts and explicit validation plan
+- Audited 30-seed main-study tables and initial task-specific findings
+
 ## 0.3.0 (2026-10-14)
 
 - Required small-text engine for training and query updates
