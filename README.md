@@ -10,7 +10,7 @@ This is a research benchmark for practitioners choosing a stopping policy and re
 
 [Methods](docs/METHODS.md) / [Study design](docs/STUDY.md) / [Pilot findings](reports/pilot/FINDINGS.md) / [Phoenix guide](docs/CLUSTER.md)
 
-The active-learning engine is [small-text](https://github.com/webis-de/small-text), the library I used during my research with Dr. Bloodgood. LastLabel adds stopping-rule evaluation, noise experiments, and auditable reports. The Python package and CLI retain the name `stoplab`.
+The active-learning engine is [small-text](https://github.com/webis-de/small-text). LastLabel adds stopping-rule evaluation, noise experiments, and auditable reports. The Python package and CLI retain the name `stoplab`.
 
 ## Research foundation
 
