@@ -16,7 +16,7 @@ This project continues Reego John-Annaselvan's undergraduate research with Dr. M
 
 This implementation differs from the published setup. It uses binary category pairs rather than all 20 categories, pool-fitted TF-IDF with header/footer/quote removal rather than the paper's bag-of-words preprocessing, absolute batch and stop-set sizes rather than 0.5% and 50%, and finite 400/800-label budgets rather than a full-training endpoint. PCF uses epsilon .01 and three pairs here, while the 2019 paper also studies other settings. These choices are documented extensions, not an exact reproduction.
 
-The original experiment code and preprocessing assets from the TCNJ work are unavailable. Undisclosed paper details are not inferred as facts.
+The TCNJ work used small-text. New LastLabel runs use small-text 1.4.1 as their required engine, with the study-specific adapters described in [METHODS.md](METHODS.md#small-text-engine). The original experiment code, library version, and preprocessing assets from the TCNJ work are unavailable. Undisclosed paper details are not inferred as facts.
 
 ## Extension rationale
 

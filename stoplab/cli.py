@@ -85,7 +85,8 @@ def execute(args):
     spec, tasks = plan(args.config)
     versions = {
         name: importlib.metadata.version(name)
-        for name in ("numpy", "scipy", "scikit-learn", "matplotlib")
+        for name in ("numpy", "scipy", "scikit-learn", "matplotlib",
+                     "small-text", "dill", "tqdm", "packaging", "threadpoolctl")
     }
     manifest = {
         "specification": spec,

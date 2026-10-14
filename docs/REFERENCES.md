@@ -28,6 +28,12 @@ The paper authors are credited for research, not listed as software contributors
 
 ## Data and software
 
+- [small-text](https://github.com/webis-de/small-text), Christopher Schröder and contributors, MIT: the required active-learning engine. Cite Christopher Schröder, Lydia Müller, Andreas Niekler, and Martin Potthast (2023), [Small-Text: Active Learning for Text Classification in Python](https://aclanthology.org/2023.eacl-demo.11/), EACL System Demonstrations, pages 84-95. This is the library used during Reego's earlier work with Dr. Bloodgood. The new implementation pins version 1.4.1.
+- [dill](https://github.com/uqfoundation/dill), Mike McKerns and contributors, BSD-3-Clause: small-text serialization dependency.
+- [tqdm](https://github.com/tqdm/tqdm), tqdm developers, MPL-2.0 and MIT: small-text progress dependency.
+- [packaging](https://github.com/pypa/packaging), Python Packaging Authority, BSD-2-Clause or Apache-2.0: version handling.
+
+
 - [20 Newsgroups](https://scikit-learn.org/stable/datasets/real_world.html#the-20-newsgroups-text-dataset):
   historical newsgroup corpus distributed through scikit-learn's documented
   fetcher, original text is not redistributed in this archive. Follow the

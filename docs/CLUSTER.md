@@ -1,6 +1,6 @@
 # Running LastLabel on PACE Phoenix
 
-The study uses CPU jobs. Phoenix's Slurm scheduler runs trajectories independently. No GPU is needed for the current linear learners.
+The study uses CPU jobs and requires small-text 1.4.1, installed automatically with LastLabel. PyTorch, transformers, and CUDA are not required. Phoenix's Slurm scheduler runs trajectories independently. No GPU is needed for the current linear learners.
 
 ## Files to upload
 
@@ -13,7 +13,7 @@ Use the supplied `lastlabel-phoenix.zip`, or clone `https://github.com/ReegoJA/l
 - `docs/`
 - `pyproject.toml`, `README.md`, `LICENSE`, `CITATION.cff`, `CONTRIBUTING.md`, `CHANGELOG.md`, `.style.yapf`
 
-The pilot results, reports, local Python environments, and cached corpus are not required for new runs. Download the corpus once on Phoenix, or transfer the existing cache to the `data/` directory if compute-node networking is unavailable.
+The pilot results, reports, local Python environments, and cached corpus are not required for new runs. The pilot predates the small-text migration. Use fresh output directories for version 0.3.0 and do not resume older runs with this environment. Download the corpus once on Phoenix, or transfer the existing cache to the `data/` directory if compute-node networking is unavailable.
 
 Use the Phoenix login address and Georgia Tech VPN instructions supplied with your account. PACE's older documentation has moved to its ServiceNow knowledge base, linked from [Accessing Clusters](https://docs.pace.gatech.edu/faqs/accessingClusters/). Use your actual charge account and permitted partition. None is embedded in the scripts.
 

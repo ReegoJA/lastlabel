@@ -47,13 +47,7 @@ class Config:
             raise ValueError("Invalid batch or stop-set size.")
 
 
-def choose_batch(scores: np.ndarray, available: np.ndarray, size: int,
-                 query: str, rng: np.random.Generator) -> np.ndarray:
-    """Acquire examples using scores and indices, without accepting labels."""
-    if query == "random":
-        return rng.choice(available, min(size, len(available)), replace=False)
-    order = np.lexsort((available, np.abs(scores[available])))
-    return available[order[:size]]
+choose_batch = learners.choose_batch
 
 
 def evaluate(scores: np.ndarray, labels: np.ndarray) -> dict:
@@ -112,11 +106,12 @@ def run(dataset: data.Dataset, config: Config) -> dict:
         for method, threshold in methods.items()
         for stop_set in ("fixed", "remaining", "easy")
     }
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", exceptions.ConvergenceWarning)
+        active = learners.initialize(dataset.pool_x, labeled, oracle[labeled],
+                                     config, query_rng)
     while True:
-        model = learners.create(config.learner, config.seed)
-        with warnings.catch_warnings():
-            warnings.simplefilter("error", exceptions.ConvergenceWarning)
-            model.fit(dataset.pool_x[labeled], oracle[labeled])
+        model = active.classifier.model
         scores = model.decision_function(dataset.pool_x)
         predictions = (scores >= 0).astype(int)
         if easy is None:
@@ -156,10 +151,12 @@ def run(dataset: data.Dataset, config: Config) -> dict:
         test_scores.append(model.decision_function(dataset.test_x))
         if len(labeled) >= config.budget:
             break
-        chosen = choose_batch(scores, available,
-                              min(config.batch, config.budget - len(labeled)),
-                              config.query, query_rng)
-        labeled.extend(chosen.tolist())
+        chosen = active.query(num_samples=min(config.batch, config.budget -
+                                              len(labeled)))
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", exceptions.ConvergenceWarning)
+            active.update(oracle[chosen])
+        labeled = active.indices_labeled.tolist()
         previous = predictions
     for record, scores in zip(traces, test_scores):
         record.update(evaluate(scores, dataset.test_y))

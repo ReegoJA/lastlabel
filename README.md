@@ -10,7 +10,7 @@ This is a research benchmark for practitioners choosing a stopping policy and re
 
 [Methods](docs/METHODS.md) / [Study design](docs/STUDY.md) / [Pilot findings](reports/pilot/FINDINGS.md) / [Phoenix guide](docs/CLUSTER.md)
 
-The Python package and CLI retain the original project name, `stoplab`.
+The active-learning engine is [small-text](https://github.com/webis-de/small-text), the library I used during my research with Dr. Bloodgood. LastLabel adds stopping-rule evaluation, noise experiments, and auditable reports. The Python package and CLI retain the name `stoplab`.
 
 ## Research foundation
 
@@ -49,7 +49,7 @@ python -m stoplab audit --results results/pilot
 python -m stoplab replay --results results/pilot --grid configs/sensitivity.json --output reports/replay
 ```
 
-The original pilot records and manifest are preserved. New runs need new output directories because the current source has changed.
+The pilot predates the small-text migration. Its records and manifest are preserved. New runs use small-text 1.4.1 and require new output directories. See [implementation details](docs/METHODS.md#small-text-engine) for compatibility checks and stopping-rule differences.
 
 ## Expanded Phoenix study
 
@@ -81,4 +81,4 @@ Created October 13, 2026 by Reego John-Annaselvan. [MIT license](LICENSE). [Rele
 
 Dr. Michael Bloodgood's research and my work with him are the starting point for LastLabel. The cited coauthors share credit for the underlying methods. The extensions and this implementation are my responsibility.
 
-Uses NumPy, SciPy, scikit-learn, Matplotlib, and threadpoolctl. Development tools include pytest, YAPF, and setuptools. Maintainer and license details are in [REFERENCES.md](docs/REFERENCES.md). Raw 20 Newsgroups text is downloaded separately.
+Uses small-text, NumPy, SciPy, scikit-learn, Matplotlib, and threadpoolctl. Development tools include pytest, YAPF, and setuptools. Maintainer and license details are in [REFERENCES.md](docs/REFERENCES.md). Raw 20 Newsgroups text is downloaded separately.

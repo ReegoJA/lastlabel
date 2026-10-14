@@ -124,3 +124,22 @@ variants help investigate size but do not completely isolate every interaction.
 The easy-set experiment intentionally combines selection and model dependence.
 The bundled study is one-factor-at-a-time, not a complete factorial interaction
 study. No clinical, production, or universal performance claim follows from it.
+
+## Small-text engine
+
+Since version 0.3.0, every new trajectory uses small-text 1.4.1's `PoolBasedActiveLearner` and `SklearnClassifierFactory`. There is no alternate engine. This reconnects the implementation to the library used in Reego John-Annaselvan's research with Dr. Michael Bloodgood. The historical library version and experiment settings from that work are unknown.
+
+The dataset given to small-text contains features and unlabeled sentinels, never the oracle's full label vector. Only initial and queried labels are supplied through `initialize_data` and `update`. Models are rebuilt each round. Evaluation labels remain outside the learner.
+
+A custom `QueryStrategy` preserves the study's decision-margin sampling, deterministic index tie-breaking, and independent random stream. This avoids substituting probability-based uncertainty or global random state during migration. Both linear learners are tested against direct scikit-learn training on dense and sparse inputs.
+
+LastLabel retains its scalar stopping-rule evaluator so shrinking stop sets compare both models on the same current indices and saved traces remain replayable. Tests cross-check fixed-set SP and PCF against small-text's `KappaAverage` and `DeltaFScore`. The following differences are intentional:
+
+- SP uses strict `>` in LastLabel. Small-text uses `>=`, so exact threshold equality differs.
+- LastLabel treats constant-class agreement as undefined kappa and does not stop on it. Small-text returns kappa 1 for identical predictions.
+- All-negative PCF comparisons are undefined. LastLabel records `None`, whereas small-text produces NaN. Neither supplies a stop in this case.
+- PCF arithmetic can differ at floating-point boundaries. LastLabel keeps the stored scalar definition used by its pilot and replay.
+
+Small-text's fixed-length prediction interface is not used directly for shrinking stop sets. Doing so would either reject changing lengths or compare different examples. These adapters and conventions are part of LastLabel, not claimed as small-text defaults.
+
+The pinned 1.4.1 release is a reproducibility choice, not a claim about the version used at TCNJ. It includes the stopping-criterion corrections documented in 1.3.3. Version 2 development interfaces are outside this study. The original pilot remains a legacy result and is not relabeled as a small-text run.

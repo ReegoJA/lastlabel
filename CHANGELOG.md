@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.0 (2026-10-14)
+
+- Required small-text engine for training and query updates
+- Paired acquisition adapter and isolated oracle labels
+- Stopping-rule cross-checks and migration documentation
+- Dependency versions recorded in new run manifests
+
 ## 0.2.0 (2026-10-14)
 
 - Expanded paired studies and explicit within-learner controls
