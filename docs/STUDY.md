@@ -56,7 +56,7 @@ Report task-specific results. New seeds on the same text test documents do not c
 
 The expanded configuration was submitted on October 14, 2026. Do not alter its thresholds or comparisons after inspecting outcomes. Audit all stage manifests, task identities, query histories, label counts, and default-rule replays before drawing conclusions.
 
-Use the main study to report remaining-minus-fixed and easy-minus-fixed differences in labels and F1 for each task, learner, policy, and noise condition. Resample matched seeds, not individual stopping decisions. The existing paired tables provide macro-F1 and label-count intervals. Add paired positive-F1 intervals during the interpretation pass before treating the case study as complete. Present both axes together rather than ranking policies by stop frequency.
+Use the main study to report remaining-minus-fixed and easy-minus-fixed differences in labels and F1 for each task, learner, policy, and noise condition. Resample matched seeds, not individual stopping decisions. The existing paired tables provide macro-F1 and label-count intervals. Paired positive-F1 intervals were added in the October 15 interpretation pass. Present both axes together rather than ranking policies by stop frequency.
 
 For an interpretable first view, use all 30 seeds from every main-study task under the symmetric-noise linear-SVM variant, with both acquisition policies and the 0 and 15% noise levels. This is a descriptive subset chosen after submission for continuity with the pilot, not a new confirmatory experiment. Disclose it and retain the complete matrix alongside it. Do not select conditions based on their apparent effect size.
 
@@ -68,4 +68,4 @@ Interpret the cost/performance trade-off before commissioning more runs. Any rev
 
 PACE Phoenix supplies parallel CPU capacity for independent trajectories. It can reduce elapsed experiment time and permit more replications. It does not improve a fixed model by itself or guarantee a favorable result. Measure representative tasks before allocating the full study, then record actual CPU time, peak memory, completed tasks, failures, environment, and source revision.
 
-All 15,360 training trajectories completed on October 14, 2026. The main-stage audit and reports are complete. Follow-up analysis remains in progress, and full scientific interpretation is not yet complete. See [CLUSTER.md](CLUSTER.md) for the upload and run procedure and [REFERENCES.md](REFERENCES.md) for Bloodgood's papers and PACE attribution.
+All 15,360 training trajectories completed on October 14, 2026. The main-stage audit and reports are complete. All three stage audits, reports, and threshold replays are complete. Full scientific interpretation is not yet complete. See [CLUSTER.md](CLUSTER.md) for the upload and run procedure and [REFERENCES.md](REFERENCES.md) for Bloodgood's papers and PACE attribution.

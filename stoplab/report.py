@@ -53,6 +53,7 @@ def variant_comparisons(rows: list, reference: str | dict) -> list:
         control = controls[(*key, control_name)]
         groups[(*key[:-1], row["variant"], control_name)].append({
             "macro_f1": row["macro_f1"] - control["macro_f1"],
+            "positive_f1": row["positive_f1"] - control["positive_f1"],
             "labels": row["labels"] - control["labels"],
         })
     comparisons = []
@@ -65,7 +66,7 @@ def variant_comparisons(rows: list, reference: str | dict) -> list:
                    variant=variant,
                    reference=control_name,
                    paired_seeds=len(members))
-        for metric in ("macro_f1", "labels"):
+        for metric in ("macro_f1", "positive_f1", "labels"):
             mean, low, high = interval([item[metric] for item in members])
             row.update({
                 metric + "_delta": mean,
@@ -111,6 +112,7 @@ def generate(results: pathlib.Path, output: pathlib.Path):
                 other = by_rule[f"{method}:{stop_set}"]
                 comparisons[(*condition, method, stop_set)].append({
                     "f1": other["macro_f1"] - reference["macro_f1"],
+                    "positive_f1": other["positive_f1"] - reference["positive_f1"],
                     "labels": other["labels"] - reference["labels"],
                 })
     summaries = []
@@ -142,7 +144,7 @@ def generate(results: pathlib.Path, output: pathlib.Path):
                    variant=variant,
                    comparison=f"{stop_set} minus fixed",
                    seeds=len(members))
-        for metric in ("f1", "labels"):
+        for metric in ("f1", "positive_f1", "labels"):
             mean, low, high = interval([item[metric] for item in members])
             row.update({
                 metric + "_delta": mean,

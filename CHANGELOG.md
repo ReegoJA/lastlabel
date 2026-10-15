@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Paired positive-class F1 intervals and completed follow-up study tables
+
 - Research case-study summary centered on annotation cost and predictive performance
 - Consistent expanded-study counts and explicit validation plan
 - Audited 30-seed main-study tables and initial task-specific findings

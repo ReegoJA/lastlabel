@@ -39,6 +39,7 @@ def test_variant_effect_uses_same_learner():
              seed=0,
              variant=name,
              macro_f1=value,
+             positive_f1=value,
              labels=100)
         for name, value in [("logistic", .2), ("svm", .8), ("svm-noise", .7)]
     ]

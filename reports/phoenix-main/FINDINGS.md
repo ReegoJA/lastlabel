@@ -27,13 +27,17 @@ The easy-set stress condition reduces labeling substantially on the two syntheti
 
 The text-task differences are smaller in this slice. Baseball versus hockey and graphics versus windows have identical cost/performance outcomes between these SP stop sets. Inspect stopping coverage in the summary table before interpreting a zero difference as successful early stopping. Censoring at the same budget can produce identical outcomes.
 
+![Paired annotation cost and performance](cost-performance.png)
+
+The figure includes all six tasks under symmetric-noise SVM, both acquisition policies, and 0 and 15% noise, as declared in the interpretation plan. Each point includes 30 paired seeds. Intervals are pointwise and settings are correlated.
+
 ## Evidence and limits
 
-- [paired.csv](paired.csv) contains the complete main-stage paired macro-F1 and annotation-count comparisons, including both acquisition policies, all noise settings, learners, and tasks. [summary.csv](summary.csv) provides per-condition positive F1, macro F1, label savings, stopping coverage, premature stops, and excess labeling with seed-level intervals.
+- [paired.csv](paired.csv) contains the complete main-stage paired macro-F1, positive-class F1, and annotation-count comparisons, including both acquisition policies, all noise settings, learners, and tasks. [summary.csv](summary.csv) provides per-condition positive F1, macro F1, label savings, stopping coverage, premature stops, and excess labeling with seed-level intervals.
 - These intervals condition on the datasets. They are not adjusted for the many comparisons and do not establish a family-wide significance claim. Synthetic seeds also change generated data, whereas text seeds reuse the same documents.
 - Training data contain simulated noise. Test labels remain clean. Four text tasks share 20 Newsgroups, which limits claims about new corpora and annotation workflows.
 - The implementation extends Bloodgood and coauthors rather than reproducing their published tables exactly. The initially easy set is an exploratory stress condition.
-- Failure analysis is not yet complete. Next, inspect premature stops and budget fallbacks by task, add paired positive-class F1 intervals, and compare the ablation and budget-extension reports. Do not tune stopping thresholds against these test outcomes.
+- Failure analysis is not yet complete. Next, inspect premature stops and budget fallbacks by task, inspect the added paired positive-class F1 intervals, and compare the [ablation](../phoenix-ablations/FINDINGS.md) and [budget-extension](../phoenix-budget/FINDINGS.md) reports. Do not tune stopping thresholds against these test outcomes.
 
 ## Interpretation plan
 
