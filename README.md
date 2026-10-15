@@ -8,9 +8,21 @@ The goal is to identify when a model's apparent stability is a reliable reason t
 
 This is a research benchmark for practitioners choosing a stopping policy and researchers testing improvements. It provides paired comparisons, auditable run records, and reusable experiments. It does not claim a new stopping algorithm or an exact reproduction of the papers' published tables.
 
-[Methods](docs/METHODS.md) / [Study design](docs/STUDY.md) / [Pilot findings](reports/pilot/FINDINGS.md) / [Main-study findings](reports/phoenix-main/FINDINGS.md) / [Budget follow-up](reports/phoenix-budget/FINDINGS.md) / [Ablations](reports/phoenix-ablations/FINDINGS.md) / [Phoenix guide](docs/CLUSTER.md)
+[Methods](docs/METHODS.md) / [Study design](docs/STUDY.md) / [Pilot findings](reports/pilot/FINDINGS.md) / [Main-study findings](reports/main/FINDINGS.md) / [Budget follow-up](reports/budget/FINDINGS.md) / [Ablations](reports/ablations/FINDINGS.md) / [Batch execution guide](docs/CLUSTER.md)
 
 The active-learning engine is [small-text](https://github.com/webis-de/small-text). LastLabel adds stopping-rule evaluation, noise experiments, and auditable reports. The Python package and CLI retain the name `stoplab`.
+
+## Independent research contributions
+
+LastLabel is an independent empirical study building on published stopping methods and my earlier research with Dr. Michael Bloodgood. Its contribution is the experimental investigation and reproducible evaluation framework, rather than a claim to have invented SP or PCF.
+
+- Simulated symmetric and class-conditional annotation noise, with clean held-out evaluation
+- Deliberately biased easy stop sets alongside fixed and remaining-pool comparisons
+- Paired estimates of annotation cost, macro F1, and positive-class F1 across tasks and seeds
+- Auditable configurations, query histories, outcome checks, and label-isolation tests
+- Threshold replay on saved trajectories without retraining or selecting thresholds on test results
+
+These are contributions of this project, not claims that each experimental technique is new to the literature. The [technical report](paper/lastlabel.tex) develops the question, evidence, and limitations.
 
 ## Research summary
 
@@ -59,7 +71,7 @@ python -m stoplab replay --results results/pilot --grid configs/sensitivity.json
 
 The pilot predates the small-text migration. Its records and manifest are preserved. New runs use small-text 1.4.1 and require new output directories. See [implementation details](docs/METHODS.md#small-text-engine) for compatibility checks and stopping-rule differences.
 
-## Expanded Phoenix study
+## Expanded study
 
 | Stage | Trajectories | Question |
 | --- | ---: | --- |
@@ -67,9 +79,9 @@ The pilot predates the small-text migration. Its records and manifest are preser
 | Controlled ablations | 4,800 | Are differences driven by query batch size or stop-set size? |
 | Budget extension | 1,920 | Does a 400-label ceiling hide later stopping behavior? |
 
-The **15,360 planned trajectories** cover six tasks. The main stage uses 30 seeds per condition, with 20 per condition in each follow-up stage. Four text tasks come from the same 20 Newsgroups corpus, alongside two synthetic conditions. All 15,360 training trajectories completed on October 14, 2026. The 8,640-run main stage passed audit, reporting, and threshold replay. Both follow-up stages also passed audit and completed reporting and threshold replay. The [initial case study](reports/phoenix-main/FINDINGS.md) includes task-specific paired estimates and explicit limitations.
+The **15,360 planned trajectories** cover six tasks. The main stage uses 30 seeds per condition, with 20 per condition in each follow-up stage. Four text tasks come from the same 20 Newsgroups corpus, alongside two synthetic conditions. All 15,360 training trajectories completed on October 14, 2026. The 8,640-run main stage passed audit, reporting, and threshold replay. Both follow-up stages also passed audit and completed reporting and threshold replay. The [initial case study](reports/main/FINDINGS.md) includes task-specific paired estimates and explicit limitations.
 
-The execution workflow targets Georgia Tech's **PACE Phoenix** cluster, provided by the Partnership for an Advanced Computing Environment (**RRID:SCR_027619**). The expanded study runs on PACE. The completed pilot ran locally. See the [Phoenix guide](docs/CLUSTER.md) for setup, resource measurement, and the acknowledgment to use after cluster execution.
+The expanded experiments were run on Georgia Tech's PACE Phoenix cluster, provided by the Partnership for an Advanced Computing Environment (RRID:SCR_027619).
 
 ## Project structure
 
@@ -79,8 +91,9 @@ The execution workflow targets Georgia Tech's **PACE Phoenix** cluster, provided
 | `tests/` | Equations, isolation, pairing, task coverage, and artifact checks |
 | `configs/` | Smoke, pilot, expanded studies, and replay specifications |
 | `cluster/` | Slurm runner and bounded-array submission tool |
-| `docs/` | Methods, study design, Phoenix guide, and references |
-| `results/pilot/`, `reports/pilot/`, `reports/phoenix-main/` | Pilot evidence and audited main-study tables |
+| `docs/` | Methods, study design, Batch execution guide, and references |
+| `results/pilot/`, `reports/pilot/`, `reports/main/` | Pilot evidence and audited main-study tables |
+| `paper/` | Standalone LaTeX technical report draft |
 | `requirements-pilot.txt` | Original pilot environment |
 
 ## Credits and license

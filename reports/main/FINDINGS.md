@@ -1,4 +1,4 @@
-# Phoenix main study: initial findings
+# Main study: initial findings
 
 October 14, 2026. All 8,640 main-study trajectories passed the provenance and outcome audit. Training used the pinned source revision `7f7d2c74d018d93e2844f67317245eb5c8c3a893` and small-text 1.4.1. Manifest: `330302ae7e859d5cfc07345ce531bbf05f702a1e5e220b27ed48286977356a0c`.
 
@@ -37,7 +37,7 @@ The figure includes all six tasks under symmetric-noise SVM, both acquisition po
 - These intervals condition on the datasets. They are not adjusted for the many comparisons and do not establish a family-wide significance claim. Synthetic seeds also change generated data, whereas text seeds reuse the same documents.
 - Training data contain simulated noise. Test labels remain clean. Four text tasks share 20 Newsgroups, which limits claims about new corpora and annotation workflows.
 - The implementation extends Bloodgood and coauthors rather than reproducing their published tables exactly. The initially easy set is an exploratory stress condition.
-- Failure analysis is not yet complete. Next, inspect premature stops and budget fallbacks by task, inspect the added paired positive-class F1 intervals, and compare the [ablation](../phoenix-ablations/FINDINGS.md) and [budget-extension](../phoenix-budget/FINDINGS.md) reports. Do not tune stopping thresholds against these test outcomes.
+- Failure analysis is not yet complete. Next, inspect premature stops and budget fallbacks by task, inspect the added paired positive-class F1 intervals, and compare the [ablation](../ablations/FINDINGS.md) and [budget-extension](../budget/FINDINGS.md) reports. Do not tune stopping thresholds against these test outcomes.
 
 ## Interpretation plan
 

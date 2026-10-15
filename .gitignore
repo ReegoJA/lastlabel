@@ -12,6 +12,6 @@ results/*
 !results/pilot/
 reports/*
 !reports/pilot/
-!reports/phoenix-main/
-!reports/phoenix-ablations/
-!reports/phoenix-budget/
+!reports/main/
+!reports/ablations/
+!reports/budget/

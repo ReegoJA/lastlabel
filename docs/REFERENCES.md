@@ -4,8 +4,7 @@ LastLabel grows directly from Reego John-Annaselvan's undergraduate research wit
 
 ## Research foundations
 
-1. Michael Bloodgood and K. Vijay-Shanker (2009). *A Method for Stopping Active
-   Learning Based on Stabilizing Predictions.* CoNLL workshop active learning.
+1. Michael Bloodgood and K. Vijay-Shanker (2009). *A Method for Stopping Active Learning Based on Stabilizing Predictions and the Need for User-Adjustable Stopping.* CoNLL 2009, pages 39-47.
    [ACL Anthology](https://aclanthology.org/W09-1107/).
    Source for SP, fixed random unlabeled stop sets, and agreement windows.
 2. Michael Bloodgood and John Grothendieck. *Analysis of Stopping Active Learning
@@ -61,7 +60,3 @@ and each result manifest. Project code is MIT-licensed.
 Coding-style references:
 [awesome-guidelines](https://github.com/Kristories/awesome-guidelines) and its
 linked [Google Python guide](https://google.github.io/styleguide/pyguide.html).
-
-## Computing infrastructure
-
-The expanded workflow targets Georgia Tech PACE Phoenix, operated by the Partnership for an Advanced Computing Environment (RRID:SCR_027619). Cluster execution is pending. The completed pilot was run locally. See [PACE acknowledgment guidance](https://pace.gatech.edu/citing-pace/) and [CLUSTER.md](CLUSTER.md).

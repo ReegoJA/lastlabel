@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Independent research contribution statement and LaTeX technical report draft
+- Study report names and concise execution documentation
+
 - Paired positive-class F1 intervals and completed follow-up study tables
 
 - Research case-study summary centered on annotation cost and predictive performance
@@ -18,8 +21,8 @@
 ## 0.2.0 (2026-10-14)
 
 - Expanded paired studies and explicit within-learner controls
-- Grouped tasks and bounded Phoenix submission
-- Bloodgood research attribution and PACE execution guide
+- Grouped tasks and bounded batch submission
+- Bloodgood research attribution and batch execution guide
 
 ## 0.1.0 (2026-10-13)
 

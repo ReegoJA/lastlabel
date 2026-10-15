@@ -1,4 +1,4 @@
-# Phoenix ablations: initial follow-up comparisons
+# Ablations: initial follow-up comparisons
 
 October 15, 2026. Training, outcome audit, reporting, and threshold replay completed successfully. These are descriptive comparisons of prespecified variants, not newly tuned rules. Training source was `7f7d2c74d018d93e2844f67317245eb5c8c3a893`.
 

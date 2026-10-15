@@ -66,6 +66,4 @@ Interpret the cost/performance trade-off before commissioning more runs. Any rev
 
 ## Computing and reporting
 
-PACE Phoenix supplies parallel CPU capacity for independent trajectories. It can reduce elapsed experiment time and permit more replications. It does not improve a fixed model by itself or guarantee a favorable result. Measure representative tasks before allocating the full study, then record actual CPU time, peak memory, completed tasks, failures, environment, and source revision.
-
-All 15,360 training trajectories completed on October 14, 2026. The main-stage audit and reports are complete. All three stage audits, reports, and threshold replays are complete. Full scientific interpretation is not yet complete. See [CLUSTER.md](CLUSTER.md) for the upload and run procedure and [REFERENCES.md](REFERENCES.md) for Bloodgood's papers and PACE attribution.
+All 15,360 training trajectories completed on October 14, 2026. The main-stage audit and reports are complete. All three stage audits, reports, and threshold replays are complete. Full scientific interpretation is not yet complete. See [CLUSTER.md](CLUSTER.md) for the upload and run procedure and [REFERENCES.md](REFERENCES.md) for the research foundations and software credits.
