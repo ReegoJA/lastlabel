@@ -143,3 +143,7 @@ LastLabel retains its scalar stopping-rule evaluator so shrinking stop sets comp
 Small-text's fixed-length prediction interface is not used directly for shrinking stop sets. Doing so would either reject changing lengths or compare different examples. These adapters and conventions are part of LastLabel, not claimed as small-text defaults.
 
 The pinned 1.4.1 release is a reproducibility choice, not a claim about the version used at TCNJ. It includes the stopping-criterion corrections documented in 1.3.3. Version 2 development interfaces are outside this study. The original pilot remains a legacy result and is not relabeled as a small-text run.
+
+## Event-level diagnostics
+
+The diagnostic analysis separates early triggers, triggers exactly at the budget, and fallback without a trigger. The fixed-budget baseline is recorded separately. The existing `premature` outcome is a retrospective gap flag that can be true even for a final-budget model. Interpret it alongside event status, not as a count of actual early stops. Conditional gap rates are undefined when no corresponding events occur. See the [failure analysis](../reports/main/diagnostics/FINDINGS.md).

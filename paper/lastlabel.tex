@@ -1,53 +1,51 @@
-\documentclass[11pt]{article}
-\usepackage[margin=1in]{geometry}
+\documentclass[10pt,twocolumn]{article}
+\usepackage[letterpaper,margin=0.75in]{geometry}
+\setlength{\columnsep}{0.25in}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{amsmath,booktabs,array}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 \usepackage{microtype}
-\setlength{\parskip}{4pt}
-\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\setlength{\emergencystretch}{1em}
+\setlength{\parindent}{1em}
 \title{LastLabel: Annotation Cost and Predictive Performance\\under Noisy Labels and Biased Stop Sets}
 \author{Reego John-Annaselvan}
-\date{October 15, 2026\\\small Independent research technical report, working draft}
+\date{October 16, 2026\\\small Technical report draft}
 \begin{document}
 \maketitle
 \begin{abstract}
-Active-learning stopping rules seek to reduce annotation effort without sacrificing predictive performance. This study examines how simulated annotation noise, stop-set selection, and finite labeling budgets affect that trade-off. LastLabel implements published stabilizing-predictions and predicted-change-of-F-measure criteria within an auditable small-text workflow. A completed study contains 15,360 trajectories across six binary tasks, two learners, two acquisition policies, and declared noise and setting variants. Analyses pair seeds within conditions and retain budget fallbacks. In a descriptive 30-seed condition with uncertainty sampling and 15\% symmetric noise, an initially easy stop set saved 114.67 labels on a balanced synthetic task but reduced macro F1 by 4.00 percentage points relative to a fixed random stop set. Several text-task contrasts were zero because both rules reached the budget. A separate 20-seed budget extension frequently improved performance at additional annotation cost, with an uncertain mean decline on the imbalanced synthetic task. These results support task-specific cost/performance assessment rather than ranking criteria by stopping frequency. The contribution is an empirical stress-test and evaluation framework, not a new stopping algorithm or an exact reproduction of prior published experiments.
+Stopping criteria for active learning must balance annotation cost against predictive performance. We present LastLabel, an empirical evaluation framework for examining this balance under simulated annotation noise, biased stop-set selection, and finite labeling budgets. The study evaluates published stopping criteria on 15,360 shared learning trajectories across six binary classification tasks. Matched-seed comparisons estimate changes in annotation counts, macro F1, and positive-class F1, with non-triggering criteria retained in the analysis. Under uncertainty sampling and 15\% symmetric noise, an initially easy stop set reduces annotation counts by 114.67 labels on a balanced synthetic task but reduces macro F1 by 4.00 percentage points relative to a fixed random stop set. In contrast, zero differences on two text tasks arise from common budget fallback. An event-level analysis further distinguishes early stopping from performance degradation observed only at the budget. Extending the budget often improves performance at additional annotation cost, although this pattern is not uniform across tasks. The results characterize limitations of stability-based stopping under the evaluated conditions and motivate joint reporting of annotation cost, predictive performance, and stopping status.
 \end{abstract}
 
-\section{Introduction and contributions}
-The practical value of active learning depends on deciding when another annotation is worth its cost. A stable classifier may still be wrong, and a criterion that stops more often may save labels by accepting a worse model. The research question is therefore: under noisy annotations and altered stop-set sampling, when do published stopping criteria preserve held-out performance while reducing labeling effort?
+\section{Introduction}
+Active learning reduces labeling requirements by selecting examples for annotation. Realizing these savings also requires a stopping criterion that identifies when additional labels provide insufficient improvement \cite{sp}. Prediction stability offers a label-free signal, but its interpretation depends on the examples used to measure agreement and the annotations used to train the model. Stable predictions on a restricted subset of the input space need not imply adequate performance on the target distribution.
 
-The working hypothesis is that a representative fixed stop set yields a more dependable cost/performance trade-off than a shrinking or initially easy set. This hypothesis is motivated by prior work and an exploratory pilot. It is not an independently preregistered claim, and dependable does not mean uniformly superior.
+This study investigates how annotation corruption, stop-set construction, and finite budgets affect the annotation--performance trade-off of existing stopping criteria. The working hypothesis is that a fixed random stop set provides a more reliable trade-off than a shrinking or initially easy set. This hypothesis follows prior stop-set research \cite{stopsets} and an exploratory pilot. The analyses are descriptive rather than preregistered tests of universal superiority.
 
-LastLabel is an independent study building on the author's earlier undergraduate research with Dr. Michael Bloodgood at The College of New Jersey. Its project-specific contributions are:
-\begin{enumerate}
-\item Controlled symmetric and class-conditional annotation corruption with clean held-out evaluation.
-\item An initially easy, model-dependent stop-set stress condition, compared with fixed random and current remaining-pool sets.
-\item Paired annotation-count, macro-F1, and positive-class-F1 estimates across tasks and matched seeds, retaining non-triggering rules.
-\item Auditable run identities, query histories, label-isolation checks, and outcome validation.
-\item Threshold replay from saved trajectory statistics, separating stopping-policy evaluation from retraining.
-\end{enumerate}
-These contributions describe this project's implementation and investigation. They do not establish priority for noise simulation, paired statistics, or replay as general research techniques.
+We develop LastLabel to evaluate these questions on shared learning trajectories. The study contributes a controlled design incorporating symmetric and class-conditional annotation noise, an initially easy stop-set stress condition, and paired comparisons across learners, tasks, and acquisition policies. The implementation records query histories and evaluation provenance, checks isolation of held-out labels, and supports threshold replay without retraining. We further distinguish early triggers, triggers at the labeling budget, and non-triggering fallbacks to avoid conflating stopping behavior with retrospective performance degradation.
+
+These contributions extend the evaluation of published criteria. The underlying stopping rules are drawn from prior work, whereas the stress-test design, evaluation implementation, and analyses presented here constitute the current study. The following sections describe the methodological foundation, experimental design, results, and implications for subsequent investigation.
 
 \section{Related work}
-Bloodgood and Vijay-Shanker introduced stabilizing predictions (SP), using agreement between successive classifiers to support annotation/performance trade-offs \cite{sp}. Bloodgood and Grothendieck analyzed the relation between prediction stability and F-measure changes \cite{analysis}. Altschuler and Bloodgood developed predicted change of F measure (PCF) as a stopping signal \cite{pcf}. Kurlandski and Bloodgood demonstrated that stop-set choice affects stopping behavior and cautioned against systematically biased sets \cite{stopsets}. LastLabel builds directly on these methods and questions. It does not claim that the importance of stop-set selection is a new discovery.
+Bloodgood and Vijay-Shanker introduced stabilizing predictions (SP), which measures agreement between successive classifiers on an unlabeled stop set \cite{sp}. Bloodgood and Grothendieck subsequently analyzed the relationship between prediction stability and changes in F-measure \cite{analysis}. Altschuler and Bloodgood developed predicted change of F measure (PCF), using prediction disagreements to estimate changes relevant to binary classification \cite{pcf}. Kurlandski and Bloodgood examined the influence of stop-set construction and showed that systematically biased sets can alter stopping performance \cite{stopsets}.
 
-Small-text provides the active-learning implementation used here \cite{smalltext}. LastLabel adds deterministic margin-based acquisition adapters, corruption simulation, stopping evaluation, provenance checks, and reporting. It preserves explicit differences from small-text's stopping defaults, including strict SP threshold comparison and abstention on undefined constant-class kappa. The present experiments extend the literature with a declared robustness matrix. Binary task pairs, preprocessing, absolute sample sizes, and finite budgets differ from the cited papers' experimental settings.
+LastLabel builds on this foundation by examining the interaction of stop-set selection with simulated annotation corruption and bounded evaluation trajectories. Its initially easy set is a deliberately model-dependent stress condition. The study uses binary task pairs, pool-fitted TF-IDF, absolute sampling sizes, and finite budgets that differ from the cited experimental protocols. Accordingly, the results are an extension of the evaluation setting rather than a reproduction of published tables.
+
+The active-learning engine is small-text \cite{smalltext}. LastLabel supplies the corruption simulator, deterministic decision-margin acquisition adapter, stopping evaluator, audit checks, and paired reporting. Its stopping implementation explicitly handles changing remaining-pool indices and undefined agreement statistics. These conventions are documented alongside the implementation to distinguish study-specific decisions from library defaults.
 
 \section{Methods}
-\subsection{Experimental unit and data}
-One trajectory comprises a task, seed, acquisition policy, noise rate, and named learner/setting variant. Training continues to the final budget so all criteria can be evaluated on the same model sequence. A rule selects its first triggering iteration, or the final model if it never triggers. Consequently, reported label savings are counterfactual annotation savings from deploying that rule, not computation actually saved during this benchmark.
+\subsection{Experimental unit and datasets}
+A learning trajectory is defined by a task, random seed, acquisition policy, noise rate, and learner/setting variant. Each trajectory is trained to its specified budget, allowing all stopping criteria to be evaluated on an identical model sequence. A criterion selects the first iteration satisfying its condition, with the final model used when no trigger occurs. Reported savings therefore estimate the annotations that would have been avoided by applying the criterion. They do not represent training computation avoided during trajectory generation.
 
 The tasks are baseball versus hockey, graphics versus Windows, politics versus religion, and space versus medicine from 20 Newsgroups, plus balanced and imbalanced synthetic binary tasks. Text tasks retain the original corpus train/test split, remove headers, footers, and quotations, and use pool-fitted TF-IDF with word unigrams/bigrams, at most 20,000 features, minimum document frequency two, maximum document frequency .95, and sublinear term frequency. Synthetic tasks contain 2,400 samples and 30 features, with 15 informative and five redundant features, and a stratified 70/30 split. Scaling fits the training pool only.
 
-Text seeds vary acquisition and corruption while retaining test documents. Synthetic seeds additionally regenerate the data. Neither type of interval estimates uncertainty across arbitrary new corpora. The four text tasks are not four independent data collections.
+For text tasks, seeds vary acquisition and corruption while retaining the same documents. For synthetic tasks, seeds additionally regenerate the dataset. The corresponding uncertainty estimates therefore describe different sources of variation and remain conditional on the selected task construction. The four text tasks share a single corpus.
 
 \subsection{Learning, noise, and stop sets}
-The learners are liblinear logistic regression and linear-kernel SVC, each with fixed $C=1$. Acquisition is random without replacement or smallest absolute decision margin, with ties resolved by pool index. New runs use small-text 1.4.1. Test labels are excluded from acquisition and stopping. Regression tests invert test labels and require identical query histories and stopping decisions.
+The learners are liblinear logistic regression and linear-kernel SVC, each with fixed $C=1$. Acquisition is random without replacement or smallest absolute decision margin, with ties resolved by pool index. The expanded study uses small-text 1.4.1. Test labels are excluded from acquisition and stopping. Regression tests invert test labels and require identical query histories and stopping decisions.
 
-Corruption is fixed per pool example. Symmetric noise flips either clean class with probability $\eta$. Positive-only and negative-only noise apply that probability within the indicated clean class, so equal nominal rates need not imply equal overall corruption. Main-study rates are $\eta\in\{0,.05,.15,.30\}$. These are simulated stress levels, not measured human error rates.
+Corruption is fixed per pool example. Symmetric noise flips either clean class with probability $\eta$. Positive-only and negative-only noise apply that probability within the indicated clean class, so equal nominal rates need not imply equal overall corruption. Main-study rates are $\eta\in\{0,.05,.15,.30\}$. The rates define controlled stress conditions rather than empirical estimates of annotator error.
 
 A fixed set samples the initial pool randomly. An easy set selects the largest absolute first-model margins and retains those examples. Both may contain subsequently queried examples. The remaining set uses the current unqueried pool. Successive models are evaluated on identical current indices for each comparison. Changing stop-set size and composition are not fully separable in the remaining-pool design.
 
@@ -64,7 +62,7 @@ A stored diagnostic called \texttt{premature} flags selected macro F1 more than 
 \begin{center}
 \begin{tabular}{lrr}
 \toprule
-Stage & Trajectories & Seeds per condition\\
+Stage & Trajectories & Seeds\\
 \midrule
 Main robustness study & 8,640 & 30\\
 Batch/stop-size ablations & 4,800 & 20\\
@@ -74,13 +72,13 @@ Budget extension & 1,920 & 20\\
 \end{center}
 Main seeds are 100--129, ablation seeds 200--219, and budget seeds 300--319. Ablations change batch size from 20 to 5 or 50, or stop-set size from 400 to 100 or 800. Budget variants compare 400 and 800 labels with matched acquisition prefixes. These stages vary settings around declared controls, rather than exhaustively crossing every interaction.
 
-Differences are paired within task, learner, acquisition policy, noise condition, and seed before 2,000 percentile bootstrap resamples. Intervals are pointwise 95\% intervals without multiplicity adjustment. Rules and replay settings share trajectories and are not independent replicates. The historical three-seed pilot uses an earlier engine and is not pooled with this study. The examples below were chosen descriptively for continuity with that pilot. Full matrices remain available, including null and adverse outcomes. No thresholds are selected from these held-out results and then called confirmed.
+Differences are paired within task, learner, acquisition policy, noise condition, and seed before 2,000 percentile bootstrap resamples. Intervals are pointwise 95\% intervals without multiplicity adjustment. Rules and replay settings share trajectories and are not independent replicates. The historical three-seed pilot uses an earlier engine and is analyzed separately. The reported subset was selected after study submission for continuity with that pilot, without a preregistered confirmatory claim. Complete matrices retain the remaining conditions. Threshold replay is used descriptively, without selecting a criterion on held-out outcomes and treating its performance on the same outcomes as independent validation.
 
 \section{Results}
-All planned trajectories and the three stage audits completed. The reporting extension adding paired positive-class F1 passed the full 52-test suite. The selected results use linear SVM, uncertainty acquisition, 15\% symmetric noise, and default SP. Tables report alternative minus reference. Negative annotation differences indicate savings, while negative F1 differences indicate worse performance.
+All 15,360 trajectories completed and passed the stage-level outcome audits. Unless otherwise specified, the following comparisons use linear SVM, uncertainty acquisition, 15\% symmetric annotation noise, and default SP. For annotation count $N$ and macro F1 $F$, paired differences are defined as $\Delta N=N_{\mathrm{alternative}}-N_{\mathrm{reference}}$ and $\Delta F=F_{\mathrm{alternative}}-F_{\mathrm{reference}}$. Thus $\Delta N<0$ denotes fewer annotations and $\Delta F<0$ denotes lower predictive performance. F1 differences in the tables are expressed in percentage points.
 
-\subsection{Savings can accompany performance loss}
-\begin{table}[htbp]
+\subsection{Annotation savings and predictive performance}
+\begin{table*}[t]
 \centering\small
 \begin{tabular}{lrr}
 \toprule
@@ -94,17 +92,19 @@ Synthetic balanced & -114.67 [-163.33, -62.00] & -4.00 [-6.07, -2.03]\\
 Synthetic imbalanced & -108.00 [-157.33, -62.67] & -5.01 [-8.00, -2.62]\\
 \bottomrule
 \end{tabular}
-\caption{Easy minus fixed stop set, 400-label budget, 30 paired seeds. F1 differences are percentage points (pp).}
-\end{table}
-The easy-set condition saves labels on the synthetic tasks at a substantial mean performance cost. This is compatible with concern about model-dependent selection, but the experiment does not isolate a unique causal mechanism. Small text-task differences do not establish a universally benign effect.
+\caption{Easy minus fixed stop set, 400-label budget, 30 paired seeds. F1 differences are percentage points (pp).}\label{tab:stopsets}
+\end{table*}
+Table~\ref{tab:stopsets} shows larger annotation reductions on the synthetic tasks than on the text tasks. On the balanced synthetic task, easy-set SP saves 114.67 labels while reducing macro F1 by 4.00 points. The paired intervals indicate that these savings accompany a performance reduction in this condition. The smaller text-task differences require a separate examination of whether the criteria triggered before the budget.
 
-\subsection{Zero differences can reflect budget censoring}
-For baseball/hockey and graphics/Windows, both fixed and easy SP have zero stopping coverage in this main-study slice and use 400 labels in every run. Their equal outcomes therefore reflect fallback to the same model, not successful agreement on an earlier stopping point. Balanced-synthetic stopping coverage is 40\% for easy SP and zero for fixed SP, illustrating why greater coverage must be considered jointly with lost F1.
+\subsection{Stopping events and budget censoring}
+We classify each criterion outcome as an early trigger ($N<B$), a trigger at the budget ($N=B$), or fallback without a trigger, where $B$ is the trajectory budget. The fixed-budget baseline is recorded separately. This classification is applied to all 153,600 criterion outcomes across the three stages. Conditional performance-gap rates are reported only when the corresponding event occurs.
 
-The retrospective \texttt{premature} diagnostic is positive for 30\% of baseball/hockey fixed-SP runs despite zero stopping coverage. These cases indicate final-budget performance below an earlier trajectory peak. Calling them failed early stops would misdescribe the result. This distinction is essential for interpreting the stored diagnostics.
+For baseball/hockey and graphics/Windows, both fixed and easy SP fall back in all 30 runs of the selected main-study condition. Their zero cost/performance differences consequently arise from selecting the same final model. On baseball/hockey, nine of these final models are more than .01 macro F1 below an earlier trajectory peak. These are performance-gap cases under fallback, not premature stopping events.
 
-\subsection{Budget extension and exceptions}
-\begin{table}[htbp]
+On the balanced synthetic task, easy-set SP triggers early in 12 of 30 runs, and all 12 selected models are more than .01 below their respective trajectory peaks. Fixed-set SP has no early triggers in this condition. On the imbalanced synthetic task, easy-set SP triggers early in 15 runs, of which 13 exceed the same gap threshold. The corresponding remaining runs are retained in the cost/performance averages. These descriptive counts distinguish the mechanism producing annotation savings from performance degradation observed at the final budget. They do not establish that the hindsight peak is a deployable stopping target.
+
+\subsection{Budget extension and setting sensitivity}
+\begin{table*}[t]
 \centering\small
 \begin{tabular}{lrr}
 \toprule
@@ -118,33 +118,39 @@ Synthetic balanced & 316.00 [265.98, 358.00] & 1.66 [0.92, 2.45]\\
 Synthetic imbalanced & 172.00 [114.00, 229.00] & -0.32 [-1.33, 0.53]\\
 \bottomrule
 \end{tabular}
-\caption{Fixed-set SP with an 800-label ceiling minus its matched 400-label control, 20 paired seeds.}
-\end{table}
-On baseball/hockey, fixed SP reaches 100\% stopping coverage at the 800-label ceiling and averages 575 labels, compared with zero coverage and 400 labels in its same-seed control. The 400-label ceiling had hidden later stopping. The additional labels also improve performance, so this is not annotation savings relative to the smaller budget. On the imbalanced synthetic task, the macro-F1 difference includes zero and the positive-class-F1 difference is -0.63 points [-2.54, 0.98]. More annotation does not yield a clear improvement in that condition.
+\caption{Fixed-set SP with an 800-label ceiling minus its matched 400-label control, 20 paired seeds.}\label{tab:budget}
+\end{table*}
+Table~\ref{tab:budget} compares the 800-label ceiling with its matched 400-label control. On baseball/hockey, fixed SP reaches 100\% stopping coverage at the 800-label ceiling and averages 575 labels, compared with zero coverage and 400 labels in its same-seed control. The 400-label ceiling had hidden later stopping. The additional labels also improve performance, so this is not annotation savings relative to the smaller budget. On the imbalanced synthetic task, the macro-F1 difference includes zero and the positive-class-F1 difference is -0.63 points [-2.54, 0.98]. More annotation does not yield a clear improvement in that condition.
 
-Batch-size ablations also resist a single ranking. Batch five on politics/religion saves 115.00 labels [-130.75, -98.75] relative to its baseline but loses 1.55 macro-F1 points [-2.47, -0.55]. Smaller batches alter both acquisition and the frequency of stability checks. They do not isolate stop-set bias alone. Full ablation and positive-class results are linked from the repository.
+The effect of batch size is task-dependent. Batch five on politics/religion saves 115.00 labels [-130.75, -98.75] relative to its baseline but loses 1.55 macro-F1 points [-2.47, -0.55]. Smaller batches alter both acquisition and the frequency of stability checks. They do not isolate stop-set bias alone. Full ablation and positive-class results are linked from the repository.
 
-\section{Discussion and limitations}
-The evidence supports reporting a two-dimensional cost/performance outcome. It does not support ranking stop sets by the number of triggers, declaring fixed sets uniformly best, or interpreting an interval excluding zero as a family-wide discovery. The nominally easy set can be stable on a narrow portion of the pool while a broader test distribution remains difficult. That is a plausible explanation for the observed trade-off, not a mechanism proved by these experiments.
+\section{Discussion}
+The observed trade-offs indicate that stopping frequency is insufficient to characterize a stopping criterion. An increased trigger rate may reduce annotation requirements while also reducing predictive performance. Conversely, identical outcomes may arise because both criteria exhaust the available budget. Joint evaluation of annotation counts, held-out performance, and event status distinguishes these cases.
 
-The imbalanced-task budget result does not establish that additional annotation is harmful. Its interval includes improvement as well as degradation. Conversely, the text-task improvements under larger budgets do not establish that 800 labels is optimal. A practical decision requires a declared acceptable performance loss or an explicit annotation utility model, neither of which is estimated here.
+Model-dependent stop-set selection provides a plausible explanation for the synthetic-task results. Predictions may stabilize on examples with large initial margins while remaining less reliable elsewhere in the input space. However, the easy-set design changes selection and model dependence jointly. The present comparisons establish an empirical association under this construction rather than identifying a unique causal mechanism.
 
-Important limits are four related text tasks from one corpus, simulated corruption, two linear learners, finite budgets, and descriptive selection of reported slices. Remaining stop sets mix changes in size and selection. Synthetic replications vary the generated problem as well as the acquisition sequence. Seed bootstrap intervals condition on the task construction, share test documents for text tasks, and ignore family-wide multiplicity. The analysis is a working case study, not a completed claim of a new general-purpose stopping policy.
+The imbalanced-task budget contrast also qualifies a simple expectation that additional annotation improves performance. Its macro-F1 interval includes both improvement and degradation. The text-task improvements under the larger budget likewise do not identify an optimal budget. Practical selection requires an explicit acceptable performance loss or annotation utility model. Neither is estimated by the present benchmark.
 
-\section{Future work and research status}
-The planned training programme is complete. Additional training is not needed to write this report. Before proposing a new experiment, complete a systematic failure analysis separating actual early triggers, final-budget triggers, and non-triggering fallbacks. Examine positive-class degradation and representative trajectories selected by an explicit rule, rather than selecting visually striking examples. Complete the interpretation of noise-mechanism and threshold-replay outcomes, retaining all evaluated conditions.
+\subsection{Limitations}
+The study evaluates two linear learners, simulated annotation errors, finite budgets, and four related text tasks from one corpus. Remaining-pool comparisons combine changes in stop-set composition and size. Synthetic seeds vary both the generated problem and the acquisition sequence, whereas text seeds share held-out documents. Bootstrap intervals are conditional on these designs and are pointwise rather than adjusted for multiple comparisons.
 
-A subsequent intervention might alter the stop-set construction or add a safeguard against misleading stability. Such a method would need development data separate from confirmation data, a declared cost/performance objective, and comparison with the existing criteria on an additional corpus. These are future studies, not results reported here. The next experiment should address an unresolved mechanism rather than simply increase the trajectory count.
+The reported subset is descriptive, and the retrospective peak is an evaluation reference rather than an attainable stopping oracle. Conditional failure counts are based on the runs that trigger and should not be interpreted as an independent random sample of trajectories. The results characterize the evaluated conditions without establishing a universally preferred stop set or a new general-purpose stopping policy.
 
-\section*{Availability and attribution}
-Code, configurations, methods, and complete published summary matrices are available at \url{https://github.com/ReegoJA/lastlabel}. The main, ablation, and budget tables are under \texttt{reports/main}, \texttt{reports/ablations}, and \texttt{reports/budget}. Training used source revision \texttt{7f7d2c7}. The full raw expanded-study trajectories are not bundled in the public repository and require durable archiving. Public tables alone are not a substitute for those records.
+\section{Conclusion and future work}
+This study evaluates published active-learning stopping criteria under controlled annotation corruption and altered stop-set selection. The completed experiments show that annotation savings can coincide with appreciable performance reductions and that finite budgets can conceal differences in stopping behavior. The event-level analysis further separates genuine early triggers from performance gaps arising after budget exhaustion. Together, these results support treating annotation cost, predictive performance, and stopping status as complementary outcomes.
 
-Dr. Michael Bloodgood's research and the author's earlier work with him motivated this independent follow-on study. The underlying SP, PCF, and stop-set research is credited below. The present extensions and interpretations are the author's responsibility. This working report does not imply coauthorship or endorsement by the cited researchers and has not undergone peer review.
+Further analysis will examine threshold and window sensitivity, class-conditional corruption, and representative trajectories selected by a stated rule. A subsequent method study could investigate whether modified stop-set construction or an additional stability safeguard improves the observed trade-off. Such an intervention requires separate development and confirmation data, a declared performance-loss tolerance, and evaluation on an additional corpus. The current completed study provides an empirical basis for defining those experiments.
+
+\section*{Reproducibility}
+Code, configurations, and complete published summary matrices are available at \url{https://github.com/ReegoJA/lastlabel}. Stage results are stored under \texttt{reports/main}, \texttt{reports/ablations}, and \texttt{reports/budget}. Training used source revision \texttt{7f7d2c7}. The diagnostic analysis records hashes of its source tables and can be regenerated with the supplied analysis module. Full raw trajectories are not bundled with the public repository and remain to be durably archived.
+
+\section*{Acknowledgments}
+The author thanks Michael Bloodgood for the research foundation and mentorship provided during earlier undergraduate work at The College of New Jersey. The present study independently extends that work through its experimental design, implementation, and analysis. SP, PCF, and prior stop-set findings are attributed to their respective authors throughout the paper.
 
 \begin{thebibliography}{9}
 \bibitem{sp} M. Bloodgood and K. Vijay-Shanker. A Method for Stopping Active Learning Based on Stabilizing Predictions and the Need for User-Adjustable Stopping. CoNLL, pp. 39--47, 2009. \url{https://aclanthology.org/W09-1107/}.
-\bibitem{analysis} M. Bloodgood and J. Grothendieck. Analysis of Stopping Active Learning Based on Stabilizing Predictions. \url{https://arxiv.org/abs/1504.06329}.
-\bibitem{pcf} M. Altschuler and M. Bloodgood. Stopping Active Learning Based on Predicted Change of F Measure for Text Classification. 2019. \url{https://arxiv.org/abs/1901.09118}.
+\bibitem{analysis} M. Bloodgood and J. Grothendieck. Analysis of Stopping Active Learning Based on Stabilizing Predictions. CoNLL, pp. 10--19, 2013. \url{https://aclanthology.org/W13-3502/}.
+\bibitem{pcf} M. Altschuler and M. Bloodgood. Stopping Active Learning Based on Predicted Change of F Measure for Text Classification. ICSC, pp. 47--54, 2019. \url{https://doi.org/10.1109/ICSC.2019.8665646}.
 \bibitem{stopsets} L. Kurlandski and M. Bloodgood. Impact of Stop Sets on Stopping Active Learning for Text Classification. ICSC, pp. 25--32, 2022. \url{https://arxiv.org/abs/2201.05460}.
 \bibitem{smalltext} C. Schr\"oder, L. M\"uller, A. Niekler, and M. Potthast. Small-Text: Active Learning for Text Classification in Python. EACL System Demonstrations, pp. 84--95, 2023. \url{https://aclanthology.org/2023.eacl-demo.11/}.
 \end{thebibliography}

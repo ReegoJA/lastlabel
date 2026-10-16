@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Event-level failure diagnostics separating early triggers and budget fallback
+- Two-column technical report with refined research framing
+
 - Independent research contribution statement and LaTeX technical report draft
 - Study report names and concise execution documentation
 

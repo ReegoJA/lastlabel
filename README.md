@@ -8,7 +8,7 @@ The goal is to identify when a model's apparent stability is a reliable reason t
 
 This is a research benchmark for practitioners choosing a stopping policy and researchers testing improvements. It provides paired comparisons, auditable run records, and reusable experiments. It does not claim a new stopping algorithm or an exact reproduction of the papers' published tables.
 
-[Methods](docs/METHODS.md) / [Study design](docs/STUDY.md) / [Pilot findings](reports/pilot/FINDINGS.md) / [Main-study findings](reports/main/FINDINGS.md) / [Budget follow-up](reports/budget/FINDINGS.md) / [Ablations](reports/ablations/FINDINGS.md) / [Batch execution guide](docs/CLUSTER.md)
+[Methods](docs/METHODS.md) / [Study design](docs/STUDY.md) / [Pilot findings](reports/pilot/FINDINGS.md) / [Main-study findings](reports/main/FINDINGS.md) / [Budget follow-up](reports/budget/FINDINGS.md) / [Ablations](reports/ablations/FINDINGS.md) / [Failure analysis](reports/main/diagnostics/FINDINGS.md) / [Batch execution guide](docs/CLUSTER.md)
 
 The active-learning engine is [small-text](https://github.com/webis-de/small-text). LastLabel adds stopping-rule evaluation, noise experiments, and auditable reports. The Python package and CLI retain the name `stoplab`.
 
@@ -30,7 +30,7 @@ These are contributions of this project, not claims that each experimental techn
 - **Working hypothesis:** A representative fixed stop set offers a more dependable cost/performance trade-off than a shrinking or initially easy set under annotation noise. This hypothesis is informed by Bloodgood and his coauthors' work and the exploratory pilot, not an independently preregistered claim.
 - **Design:** Compare SP and PCF on shared active-learning trajectories, pairing seeds within each task, learner, query policy, and noise condition. Retain budget fallbacks. Report annotation counts and held-out macro and positive-class F1 together, with paired seed-level uncertainty and task-specific failure analyses.
 - **Principal findings:** The exploratory pilot showed a possible savings/performance trade-off. In the audited main study, easy-set SP saved 114.67 labels but lost 4.00 macro-F1 percentage points in the corresponding noisy balanced-synthetic condition across 30 seeds. Paired 95% intervals were [-163.33, -62.00] labels and [-6.07, -2.03] F1 points. Several text tasks showed little or no difference. These pointwise results support task-specific interpretation, not a universal ranking.
-- **Limitations:** The 96-trajectory pilot is exploratory, uses simulated noise and only three seeds per condition, and predates the small-text migration. Four text tasks in the expanded study share one corpus. New seeds do not supply new test documents. The main-study audit is complete. Paired positive-class F1 estimates and initial follow-up comparisons are available. Full failure analysis remains incomplete.
+- **Limitations:** The 96-trajectory pilot is exploratory, uses simulated noise and only three seeds per condition, and predates the small-text migration. Four text tasks in the expanded study share one corpus. New seeds do not supply new test documents. The main-study audit is complete. Paired positive-class F1 estimates and initial follow-up comparisons are available. Event-level diagnostics now distinguish early triggers from budget fallback. Mechanistic failure interpretation remains incomplete.
 
 ## Research foundation
 

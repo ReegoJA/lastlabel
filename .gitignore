@@ -15,3 +15,6 @@ reports/*
 !reports/main/
 !reports/ablations/
 !reports/budget/
+
+paper/*.pdf
+paper/*.synctex.gz
