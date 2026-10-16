@@ -40,7 +40,7 @@ The TCNJ work used small-text. New LastLabel runs use small-text 1.4.1 as their 
 
 Main seeds are 100-129, ablation seeds 200-219, and budget seeds 300-319. Distinct ranges avoid reusing pilot seeds 0-2. Seed IDs themselves have no scientific significance.
 
-Full threshold replay would produce 1,658,880 correlated decisions from the expanded study's 15,360 trajectories.
+Completed threshold replay produced 1,658,880 correlated decisions from the expanded study's 15,360 trajectories. The [paired sensitivity analysis](../reports/main/diagnostics/SENSITIVITY.md) reports 1,728 setting-level contrasts in the declared descriptive linear-SVM subset.
 
 ## Comparisons and interpretation
 

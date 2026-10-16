@@ -7,9 +7,9 @@ LastLabel grows directly from Reego John-Annaselvan's undergraduate research wit
 1. Michael Bloodgood and K. Vijay-Shanker (2009). *A Method for Stopping Active Learning Based on Stabilizing Predictions and the Need for User-Adjustable Stopping.* CoNLL 2009, pages 39-47.
    [ACL Anthology](https://aclanthology.org/W09-1107/).
    Source for SP, fixed random unlabeled stop sets, and agreement windows.
-2. Michael Bloodgood and John Grothendieck. *Analysis of Stopping Active Learning
-   Based on Stabilizing Predictions.*
-   [arXiv:1504.06329](https://arxiv.org/abs/1504.06329).
+2. Michael Bloodgood and John Grothendieck (2013). *Analysis of Stopping Active Learning
+   Based on Stabilizing Predictions.* CoNLL, pages 10-19.
+   [ACL Anthology](https://aclanthology.org/W13-3502/).
    Theoretical motivation for connecting agreement to changes in F-measure,
    no unconditional noisy-label guarantee is asserted here.
 3. Michael Altschuler and Michael Bloodgood (2019). *Stopping Active Learning
@@ -19,6 +19,8 @@ LastLabel grows directly from Reego John-Annaselvan's undergraduate research wit
 4. Kurlandski and Bloodgood (2022). *Impact of Stop Sets on Stopping Active
    Learning for Text Classification.* [arXiv:2201.05460](https://arxiv.org/abs/2201.05460).
    Motivation for comparing fixed stop sets with the remaining unlabeled pool.
+5. Zac Pullar-Strecker, Katharina Dost, Eibe Frank, and Jörg Wicker (2024, online 2022). *Hitting the target: stopping active learning at the cost-based optimum.* Machine Learning, 113, pages 1529-1547. [Publisher](https://doi.org/10.1007/s10994-022-06253-1).
+   Prior cost-based comparison and analysis of treatments for non-stopping criteria. LastLabel does not claim to introduce those evaluation concerns.
 
 The implementation independently follows these definitions. Its logistic
 learner, synthetic noise, easy-set stress test, study matrix, and software

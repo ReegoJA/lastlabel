@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Paired threshold and window sensitivity across 30 matched seeds
+
 - Event-level failure diagnostics separating early triggers and budget fallback
 - Two-column technical report with refined research framing
 

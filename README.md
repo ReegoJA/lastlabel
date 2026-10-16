@@ -8,7 +8,7 @@ The goal is to identify when a model's apparent stability is a reliable reason t
 
 This is a research benchmark for practitioners choosing a stopping policy and researchers testing improvements. It provides paired comparisons, auditable run records, and reusable experiments. It does not claim a new stopping algorithm or an exact reproduction of the papers' published tables.
 
-[Methods](docs/METHODS.md) / [Study design](docs/STUDY.md) / [Pilot findings](reports/pilot/FINDINGS.md) / [Main-study findings](reports/main/FINDINGS.md) / [Budget follow-up](reports/budget/FINDINGS.md) / [Ablations](reports/ablations/FINDINGS.md) / [Failure analysis](reports/main/diagnostics/FINDINGS.md) / [Batch execution guide](docs/CLUSTER.md)
+[Methods](docs/METHODS.md) / [Study design](docs/STUDY.md) / [Pilot findings](reports/pilot/FINDINGS.md) / [Main-study findings](reports/main/FINDINGS.md) / [Budget follow-up](reports/budget/FINDINGS.md) / [Ablations](reports/ablations/FINDINGS.md) / [Failure analysis](reports/main/diagnostics/FINDINGS.md) / [Threshold sensitivity](reports/main/diagnostics/SENSITIVITY.md) / [Batch execution guide](docs/CLUSTER.md)
 
 The active-learning engine is [small-text](https://github.com/webis-de/small-text). LastLabel adds stopping-rule evaluation, noise experiments, and auditable reports. The Python package and CLI retain the name `stoplab`.
 
@@ -35,7 +35,7 @@ These are contributions of this project, not claims that each experimental techn
 ## Research foundation
 
 - **Stabilizing Predictions:** Bloodgood and Vijay-Shanker, [2009](https://aclanthology.org/W09-1107/). Agreement between successive models supplies a label-free stopping signal.
-- **Theory:** Bloodgood and Grothendieck, [2015](https://arxiv.org/abs/1504.06329). Analysis connecting prediction stability with changes in F measure.
+- **Theory:** Bloodgood and Grothendieck, [2013](https://aclanthology.org/W13-3502/). Analysis connecting prediction stability with changes in F measure.
 - **Predicted Change of F:** Altschuler and Bloodgood, [2019](https://arxiv.org/abs/1901.09118). A stopping criterion estimating changes in positive-class F measure.
 - **Stop-set selection:** Kurlandski and Bloodgood, [2022](https://arxiv.org/abs/2201.05460). The basis for comparing a representative fixed stop set with the shrinking unlabeled pool.
 

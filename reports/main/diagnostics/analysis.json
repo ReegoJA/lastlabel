@@ -1,4 +1,20 @@
 {
   "runs_sha256": "2746f8d0511441393ea3069c9959e15de1b0962ae8d0dde821da52536d211644",
-  "failure_scope": "All input trajectory outcomes"
+  "replay_sha256": "ff9d62016f6ea8f13ccb7becbe83f3915b50717b1c044ca4dfe21df3cca78fa5",
+  "failure_scope": "All input trajectory outcomes",
+  "replay_scope": {
+    "variants": [
+      "linear-svm-symmetric"
+    ],
+    "noises": [
+      0,
+      0.15
+    ],
+    "methods": [
+      "sp",
+      "pcf"
+    ],
+    "reference": "same stop set, default threshold, window 3"
+  },
+  "interpretation": "Descriptive paired replay. No test-set threshold selection."
 }
