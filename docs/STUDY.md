@@ -2,7 +2,7 @@
 
 ## Purpose and origin
 
-This project continues Reego John-Annaselvan's undergraduate research with Dr. Michael Bloodgood at The College of New Jersey. Bloodgood and his coauthors' published stopping methods are the foundation. The study asks when those methods preserve performance while reducing annotation effort, and where additional safeguards may be needed.
+This independent project was inspired by Reego John-Annaselvan's earlier undergraduate research with Michael Bloodgood at The College of New Jersey. The current implementation and analyses are John-Annaselvan's responsibility. Bloodgood and his coauthors' published stopping methods are the foundation. The study asks when those methods preserve performance while reducing annotation effort, and where additional safeguards may be needed.
 
 ## Published foundation and implementation differences
 

@@ -1,0 +1,5 @@
+{
+  "runs_sha256": "2746f8d0511441393ea3069c9959e15de1b0962ae8d0dde821da52536d211644",
+  "contrast": "(alternative - fixed) noisy minus (alternative - fixed) clean",
+  "interpretation": "Exploratory paired seed bootstrap, pointwise 95% intervals."
+}

@@ -100,8 +100,8 @@ query histories and stopping decisions.
 
 Macro F1 is the primary robustness metric, positive F1 separately aligns with
 PCF's binary positive-class quantity. AUROC is also retained. Label savings
-is `1 - selected labels / final budget`. Premature stopping is selected macro
-F1 more than 0.01 below the **best observed point on that finite trajectory**.
+is `1 - selected labels / final budget`. The historical `premature` field denotes a retrospective performance gap: selected macro
+F1 more than 0.01 below the **best observed point on that finite trajectory**. It does not require an early trigger.
 Excess labeling is labels beyond the first point within that tolerance of the
 peak, clipped at zero. This hindsight reference is not a globally optimal
 budget or a deployable oracle. A final-budget model can be below an earlier

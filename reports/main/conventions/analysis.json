@@ -1,0 +1,8 @@
+{
+  "archive_sha256": "8c5c97408c3bd4315dfc5df51b6f93d232778c5830107a765d3781b1e74c770c",
+  "outcomes": 25920,
+  "changed_models": 905,
+  "changed_triggers": 790,
+  "convention": "Noninitial undefined kappa on a nonempty set becomes 1. Strict threshold, window, PCF, and trained models remain unchanged.",
+  "interpretation": "Alternative minus archived convention. Pointwise paired seed intervals."
+}

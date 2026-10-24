@@ -1,6 +1,10 @@
 # Changelog
 
-## Unreleased
+## 0.4.0 (2026-10-24)
+
+- Paired noise interactions and constant-agreement sensitivity
+- Explicitly selected trajectory cases and completed descriptive technical report
+- Versioned analysis artifacts and clarified attribution
 
 - Paired threshold and window sensitivity across 30 matched seeds
 
